@@ -68,7 +68,7 @@
                 _MAX_UNSAFE_LLU(x, y)) : \
             _MAX_UNSAFE_LLU(x, y)))
 
-#define _RAISE_EXCEPTION ((signed long long)(1/0)) /* If you are wondering why you just got a divide-by-zero exception, it is because this code was compiled in debug mode (the NDEBUG flag was not set) there is a MIN macro being used where it cannot give the right answer, either because the answer is negative and the type of the expression is unsigned, or because the answer is greater than LLONG_MAX and the type of the expression is signed long long.  Please see minmax.h for information on how to use these MIN macros safely. */
+#define _RAISE_EXCEPTION ((signed long long)(1/0)) /* If you are wondering why you just got a divide-by-zero exception, it is because this code was compiled in debug mode (the ZMINMAXDEBUG flag was set) and there is a MIN macro being used where it cannot give the right answer, either because the answer is negative and the type of the expression is unsigned, or because the answer is greater than LLONG_MAX and the type of the expression is signed long long.  Please see minmax.h for information on how to use these MIN macros safely. */
 
 /**
  * The MIN_LLS macros always correctly choose the smallest one of the two 
@@ -179,12 +179,12 @@
                 ((unsigned long long)(x)) : \
                 _MIN_LLU_UNSAFE(x, y))))
 
-#ifdef NDEBUG
-#define MIN_LLS _FASTER_MIN_LLS_FLEX
-#define MIN_LLU _MIN_LLU_FLEX
-#else
+#ifdef ZMINMAXDEBUG
 #define MIN_LLS _FASTER_MIN_LLS_CHECK
 #define MIN_LLU _MIN_CHECK
+#else
+#define MIN_LLS _FASTER_MIN_LLS_FLEX
+#define MIN_LLU _MIN_LLU_FLEX
 #endif
 
 #define MAX _FASTER_MAX_SAFE

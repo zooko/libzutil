@@ -22,8 +22,8 @@
  * a signed type you'll get the wrong answer, e.g. the following will evaluate 
  * to false: MAX(2, 1LLU) > -1
  * This is just something that you should be aware of as a C programmer -- it 
- * happens anytime a signed value is compared to an unsigned value and has 
- * nothing to do with the MAX macro.
+ * happens anytime a signed value is compared to an unsigned value and can't be 
+ * fixed by the MAX macro.
  * 
  * As a matter of fact, the MAX macro casts the result to signed long long, 
  * unless the result is too big to fit into a signed long long.  That's why 
@@ -62,10 +62,10 @@
  *
  * debug mode
  *
- * Now if you compiled in debug mode (the NDEBUG flag was unset), then each of 
- * these macros will cause a floating point exception (a divide-by-zero error) 
- * rather than returning a potentially incorrect result.  That is the MIN macro 
- * will cause a floating point exception if both of the operands are 
+ * If you #define "ZMINMAXDEBUG" before #include'ing this header file then each 
+ * of these macros will cause a floating point exception (a divide-by-zero 
+ * error) rather than returning a potentially incorrect result.  That is the MIN 
+ * macro will cause a floating point exception if both of the operands are 
  * unsigned long longs and both of their values are greater than LLONG_MAX, and 
  * the MIN_LLU macro will cause a floating point exception if the smallest of 
  * the two operands is a negative number.
@@ -73,6 +73,10 @@
  * This is to help you locate the potentially incorrect MIN and change it from 
  * MIN to MIN_LLU (if both of the operands are unsigned long longs) or from 
  * MIN_LLU to MIN (if one of the operands might be negative).
+ *
+ * One drawback to using the ZMINMAXDEBUG versions is that a sufficiently clever 
+ * compiler will emit warnings telling you that the code might cause a 
+ * floating-point exception.
  */
 
 #endif /* #ifndef __INCL_minmax_h */
