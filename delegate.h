@@ -4,8 +4,8 @@
 /* This is a simple struct with a "void* obj" pointer and a function pointer.  
    You can pass structs like this to a function, and then that function can 
    "call you back" later by invoking the function pointer, passing the obj.  
-   This is a way to get asynchronous notification of events that have happened 
-   on the OPSEC mainloop. */
+   This idiom is very useful for event-driven programming, callback design 
+   patterns, etc. */
 typedef struct {
 	void* obj;
 	void (*meth)(void*);
