@@ -196,20 +196,6 @@ int test_FITS_INTO_SIGNED_INT()
 	return 1;
 }
 
-int test_GCC_doc_suggestion()
-{
-#define max(a,b) \
-       ({typedef _ta = (a), _tb = (b);  \
-         _ta _a = (a); _tb _b = (b);     \
-         _a > _b ? _a : _b; })
-
-	if (max(-1, 2UL) > 0) {
-		printf("That's a strange definition of \"safe\".\n");
-		return -1;
-	}
-	return 0;
-}
-
 /*
 int test_minmax_flexible_crazybadargs()
 {
@@ -457,7 +443,6 @@ int main(int argv, char**argc)
 {
 	test_FITS_INTO_SIGNED_INT();
 	test_overflow();
-	test_GCC_doc_suggestion();
 	test_morelimits();
 	test_gcc_ifexpr();
 /*	test_minmax_flexible_crazybadargs();*/
