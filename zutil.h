@@ -14,35 +14,105 @@
 #include <limits.h>
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.3 2002/02/10 16:03:38 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.4 2002/09/04 23:40:36 zooko Exp $";
 
 static int const zutil_vermaj = 0;
-static int const zutil_vermin = 2;
+static int const zutil_vermin = 3;
 static int const zutil_vermicro = 0;
-static char const* const zutil_vernum = "0.2.0";
+static char const* const zutil_vernum = "0.3.0";
 
 /**
- * This is guaranteed by ANSI C to be at least large enough to store at least 8 bits.  It is allowed
- *  to be larger.
-*/
+ * This is guaranteed by standard C to be at least large enough to store at least 8 bits.  It is 
+ * allowed to be larger.
+ */
 typedef unsigned char zbyte;
 
 /*
 `divceil(x, y)' is better than `(x+(y-1))/y' because the latter can overflow in the addition.   
-Also `divceil()' is probably faster, since GCC 3, for example, will generate code that does a single
-division operation and then uses both the quotient and the remainder.  Unfortunately the macro 
-version of `divceil()' suffers from the problem that if its argument expressions have side effects, 
-the side effects happen twice.
+Also `divceil()' is probably faster, since GCC 3.0, for example, will generate code that does a 
+single division operation and then uses both the quotient and the remainder.  Unfortunately the 
+macro version of `divceil()' suffers from "the macro problem" -- if its argument expressions have 
+side effects, the side effects happen twice.
 */
 unsigned int divceil(unsigned int n, unsigned int d);
 unsigned long ldivceil(unsigned long n, unsigned long d);
 
 unsigned int DIVCEIL(unsigned int n, unsigned int d);
 unsigned long LDIVCEIL(unsigned long n, unsigned long d);
-#ifdef NDEBUG
-#define DIVCEIL(n, d) ((n)/(d)+((n)%(d)!=0))
-#define LDIVCEIL(n, d) ((unsigned long)((n)/(d)+((n)%(d)!=0)))
-#endif /* #ifdef NDEBUG */
+
+/*
+Returns true iff the value (x+y) cannot be stored in a char.
+ */
+int add_would_overflow_char(char x, char y);
+int ADD_WOULD_OVERFLOW_CHAR(char x, char y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in an unsigned char.
+ */
+int add_would_overflow_uchar(unsigned char x, unsigned char y);
+int ADD_WOULD_OVERFLOW_UCHAR(unsigned char x, unsigned char y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in a signed char.
+ */
+int add_would_overflow_schar(signed char x, signed char y);
+int ADD_WOULD_OVERFLOW_SCHAR(signed char x, signed char y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in a short.
+ */
+int add_would_overflow_short(short x, short y);
+int ADD_WOULD_OVERFLOW_SHORT(short x, short y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in an unsigned short.
+ */
+int add_would_overflow_ushort(unsigned short x, unsigned short y);
+int ADD_WOULD_OVERFLOW_USHORT(unsigned short x, unsigned short y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in an int.
+ */
+int add_would_overflow_int(int x, int y);
+int ADD_WOULD_OVERFLOW_INT(int x, int y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in an unsigned int.
+ */
+int add_would_overflow_uint(unsigned int x, unsigned int y);
+int ADD_WOULD_OVERFLOW_UINT(unsigned int x, unsigned int y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in a long.
+ */
+int add_would_overflow_long(long x, long y);
+int ADD_WOULD_OVERFLOW_LONG(long x, long y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in an unsigned long.
+ */
+int add_would_overflow_ulong(unsigned long x, unsigned long y);
+int ADD_WOULD_OVERFLOW_ULONG(unsigned long x, unsigned long y);
+
+/*
+ * The following is not standard C.  If your compiler supports LONG LONG, then please patch this to somehow detect that during preprocessing and send me the patch.
+ */
+#ifdef __GNUC__
+/*
+Returns true iff the value (x+y) cannot be stored in a long long.
+ */
+int add_would_overflow_longlong(long long x, long long y);
+int ADD_WOULD_OVERFLOW_LONGLONG(long long x, long long y);
+
+/*
+Returns true iff the value (x+y) cannot be stored in an unsigned long long.
+ */
+int add_would_overflow_ulonglong(unsigned long long x, unsigned long long y);
+int ADD_WOULD_OVERFLOW_ULONGLONG(unsigned long long x, unsigned long long y);
+
+#endif /* #ifdef __GNUC__ */
+
+#include "zutilimp.h" /* implementation stuff that you needn't see in order to use the library */
 
 #endif /* #ifndef __INCL_zutil_h */
 

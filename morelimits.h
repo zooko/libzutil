@@ -7,28 +7,18 @@
 #ifndef __INCL_morelimits_h
 #define __INCL_morelimits_h
 
+#include "morelimitsimp.h" /* implementation stuff that you needn't see in order to use the library */
+
 #include <stddef.h>
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.2 2002/02/10 16:03:38 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.3 2002/09/04 23:40:36 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 1;
 static int const morelimits_vermicro = 0;
 static char const* const morelimits_vernum = "0.1.0";
-
-#define Z_MAX_UNSIGNED(typ) ((typ)(~((typ)0)))
-#define Z_MIN_UNSIGNED(typ) ((typ)0)
-
-/* The following `Z_MAX_SIGNED' and `Z_MIN_SIGNED' macros will work on any C implementation where the maximum value of a signed type `typ' is equal to 2^(sizeof(typ)*CHAR_BIT) - 1, and the minimum value of a signed is equal to the -1*(maximum value+1). */
-#define Z_SIGNED_HIGH_BIT(typ) ((typ)((typ)1<<((sizeof(typ)*CHAR_BIT)-2)))
-#define Z_SIGNED_LOW_BITS(typ) ((typ)((Z_SIGNED_HIGH_BIT(typ))-1))
-#define Z_MAX_SIGNED(typ) ((typ)(Z_SIGNED_HIGH_BIT(typ) + Z_SIGNED_LOW_BITS(typ)))
-#define Z_MIN_SIGNED(typ) ((typ)((-Z_MAX_SIGNED(typ))-1))
-
-#define Z_MAX(typ) ((Z_MAX_SIGNED(typ)>Z_MAX_UNSIGNED(typ))?Z_MAX_SIGNED(typ):Z_MAX_UNSIGNED(typ))
-#define Z_MIN(typ) ((Z_MIN_SIGNED(typ)<Z_MIN_UNSIGNED(typ))?Z_MIN_SIGNED(typ):Z_MIN_UNSIGNED(typ))
 
 /*
  * The following are not defined in the standard C library's "limits.h", but they should be!
@@ -55,7 +45,7 @@ static char const* const morelimits_vernum = "0.1.0";
 #define MIN_LONGLONG Z_MIN(long long)
 #define MAX_ULONGLONG Z_MAX(unsigned long long)
 #define MIN_ULONGLONG Z_MIN(unsigned long long)
-#endif
+#endif /* #ifdef __GNUC__ */
 
 /*
  * All of the following are defined in the standard C library's "limits.h" header, under different names.  They are included here just because I can.  Maybe someday you'll be on a machine with an incorrect or incomplete "limits.h" and you'll thank me.
@@ -74,6 +64,9 @@ static char const* const morelimits_vernum = "0.1.0";
 #define MIN_INT Z_MIN(int)
 #define MIN_SHORT Z_MIN(short)
 #define MIN_CHAR Z_MIN(char)
+
+#define MAX_SCHAR Z_MAX(signed char)
+#define MIN_SCHAR Z_MIN(signed char)
 
 #endif /* #ifndef __INCL_morelimits_h */
 

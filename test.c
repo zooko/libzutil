@@ -12,6 +12,190 @@
 
 #include <assert.h>
 
+int test_overflow()
+{
+	assert (add_would_overflow_char(MAX_CHAR - 2, MAX_CHAR - 3));
+	assert (add_would_overflow_char(MAX_CHAR, MAX_CHAR));
+	assert (add_would_overflow_char((MAX_CHAR/2)+1, (MAX_CHAR/2)+1));
+	assert (!add_would_overflow_char(MAX_CHAR/2, MAX_CHAR/2));
+	assert (!add_would_overflow_char(MAX_CHAR, 0));
+	assert (add_would_overflow_char(MAX_CHAR, 1));
+	assert (add_would_overflow_char(1, MAX_CHAR));
+	assert (!add_would_overflow_char(MAX_CHAR-1, 1));
+	assert (!add_would_overflow_char(MAX_CHAR-2, 2));
+	assert (!add_would_overflow_char(0, 0));
+
+	assert (add_would_overflow_short(MAX_SHORT - 2, MAX_SHORT - 3));
+	assert (add_would_overflow_short(MAX_SHORT, MAX_SHORT));
+	assert (add_would_overflow_short((MAX_SHORT/2)+1, (MAX_SHORT/2)+1));
+	assert (!add_would_overflow_short(MAX_SHORT/2, MAX_SHORT/2));
+	assert (!add_would_overflow_short(MAX_SHORT, 0));
+	assert (!add_would_overflow_short(MAX_SHORT-1, 1));
+	assert (!add_would_overflow_short(MAX_SHORT-2, 2));
+	assert (!add_would_overflow_short(0, 0));
+
+	assert (add_would_overflow_short(MIN_SHORT, MIN_SHORT));
+	assert (add_would_overflow_short(MIN_SHORT, -1));
+	assert (add_would_overflow_short(-1, MIN_SHORT));
+	assert (add_would_overflow_short((MIN_SHORT/2)-1, (MIN_SHORT/2)-1));
+	assert (!add_would_overflow_short(MIN_SHORT/2, MIN_SHORT/2));
+
+	assert (add_would_overflow_int(MAX_INT - 2, MAX_INT - 3));
+	assert (add_would_overflow_int(MAX_INT, MAX_INT));
+	assert (add_would_overflow_int((MAX_INT/2)+1, (MAX_INT/2)+1));
+	assert (!add_would_overflow_int(MAX_INT/2, MAX_INT/2));
+	assert (!add_would_overflow_int(MAX_INT, 0));
+	assert (add_would_overflow_int(MAX_INT, 1));
+	assert (add_would_overflow_int(1, MAX_INT));
+	assert (!add_would_overflow_int(MAX_INT-1, 1));
+	assert (!add_would_overflow_int(MAX_INT-2, 2));
+	assert (!add_would_overflow_int(0, 0));
+
+	assert (add_would_overflow_int(MIN_INT, MIN_INT));
+	assert (add_would_overflow_int(MIN_INT, -1));
+	assert (add_would_overflow_int(-1, MIN_INT));
+	assert (add_would_overflow_int((MIN_INT/2)-1, (MIN_INT/2)-1));
+	assert (!add_would_overflow_int(MIN_INT/2, MIN_INT/2));
+
+	assert (add_would_overflow_uint(MAX_UINT - 2, MAX_UINT - 3));
+	assert (add_would_overflow_uint(MAX_UINT, MAX_UINT));
+	assert (add_would_overflow_uint((MAX_UINT/2)+1, (MAX_UINT/2)+1));
+	assert (!add_would_overflow_uint(MAX_UINT/2, MAX_UINT/2));
+	assert (!add_would_overflow_uint(MAX_UINT, 0));
+	assert (add_would_overflow_uint(MAX_UINT, 1));
+	assert (add_would_overflow_uint(1, MAX_UINT));
+	assert (!add_would_overflow_uint(MAX_UINT-1, 1));
+	assert (!add_would_overflow_uint(MAX_UINT-2, 2));
+	assert (!add_would_overflow_uint(0, 0));
+
+	assert (add_would_overflow_long(MAX_LONG - 2, MAX_LONG - 3));
+	assert (add_would_overflow_long(MAX_LONG, MAX_LONG));
+	assert (add_would_overflow_long((MAX_LONG/2)+1, (MAX_LONG/2)+1));
+	assert (!add_would_overflow_long(MAX_LONG/2, MAX_LONG/2));
+	assert (!add_would_overflow_long(MAX_LONG, 0));
+	assert (add_would_overflow_long(MAX_LONG, 1));
+	assert (add_would_overflow_long(1, MAX_LONG));
+	assert (!add_would_overflow_long(MAX_LONG-1, 1));
+	assert (!add_would_overflow_long(MAX_LONG-2, 2));
+	assert (!add_would_overflow_long(0, 0));
+
+	assert (add_would_overflow_long(MIN_INT, MIN_INT));
+	assert (add_would_overflow_long(MIN_INT, -1));
+	assert (add_would_overflow_long(-1, MIN_INT));
+	assert (add_would_overflow_long((MIN_INT/2)-1, (MIN_INT/2)-1));
+	assert (!add_would_overflow_long(MIN_INT/2, MIN_INT/2));
+
+	assert (add_would_overflow_ulong(MAX_ULONG - 2, MAX_ULONG - 3));
+	assert (add_would_overflow_ulong(MAX_ULONG, MAX_ULONG));
+	assert (add_would_overflow_ulong((MAX_ULONG/2)+1, (MAX_ULONG/2)+1));
+	assert (!add_would_overflow_ulong(MAX_ULONG/2, MAX_ULONG/2));
+	assert (!add_would_overflow_ulong(MAX_ULONG, 0));
+	assert (add_would_overflow_ulong(MAX_ULONG, 1));
+	assert (add_would_overflow_ulong(1, MAX_ULONG));
+	assert (!add_would_overflow_ulong(MAX_ULONG-1, 1));
+	assert (!add_would_overflow_ulong(MAX_ULONG-2, 2));
+	assert (!add_would_overflow_ulong(0, 0));
+
+	return 1;
+}
+
+int test_CHAR_FITS_INTO_SIGNED_INT()
+{
+	assert (TYPE_FITS_INTO_SIGNED_INT(signed char));
+	assert (TYPE_FITS_INTO_SIGNED_INT(char));
+	assert (TYPE_FITS_INTO_SIGNED_INT(unsigned char));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)0));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((char)0));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((unsigned char)0));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((char)1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((unsigned char)1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)2));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((char)2));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((unsigned char)2));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)-1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((char)-1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((unsigned char)-1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)MAX_CHAR));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((char)MAX_CHAR));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((unsigned char)MAX_UCHAR));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)MIN_CHAR));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((char)MIN_CHAR));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((unsigned char)MIN_UCHAR));
+	return 1;
+}
+
+int test_SIGNED_NONLONG_FITS_INTO_SIGNED_INT()
+{
+	assert (TYPE_FITS_INTO_SIGNED_INT(signed char));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)0));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)2));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)-1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)MAX_CHAR));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed char)MIN_CHAR));
+	assert (TYPE_FITS_INTO_SIGNED_INT(signed short));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed short)0));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed short)1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed short)2));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed short)-1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed short)MAX_SHORT));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed short)MIN_SHORT));
+	assert (TYPE_FITS_INTO_SIGNED_INT(signed int));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed int)0));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed int)1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed int)2));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed int)-1));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed int)MAX_INT));
+	assert (OPERAND_FITS_INTO_SIGNED_INT((signed int)MIN_INT));
+	return 1;
+}
+
+int test_UNSIGNED_INT_NOT_FITS_INTO_SIGNED_INT()
+{
+	assert (!TYPE_FITS_INTO_SIGNED_INT(unsigned int));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)0));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)-1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)2));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)MAX_UINT));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)MIN_UINT));
+	return 1;
+}
+
+int test_UNSIGNED_LONG_NOT_FITS_INTO_SIGNED_INT()
+{
+	assert (!TYPE_FITS_INTO_SIGNED_INT(unsigned long));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long)0));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long)-1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long)1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long)2));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long)MAX_ULONG));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long)MIN_ULONG));
+	return 1;
+}
+
+int test_FITS_INTO_SIGNED_INT()
+{
+	if (!test_CHAR_FITS_INTO_SIGNED_INT()) {
+		return 0;
+	}
+
+	if (!test_SIGNED_NONLONG_FITS_INTO_SIGNED_INT()) {
+		return 0;
+	}
+
+	if (!test_UNSIGNED_INT_NOT_FITS_INTO_SIGNED_INT()) {
+		return 0;
+	}
+
+	if (!test_UNSIGNED_LONG_NOT_FITS_INTO_SIGNED_INT()) {
+		return 0;
+	}
+
+	return 1;
+}
+
 int test_GCC_doc_suggestion()
 {
 #define max(a,b) \
@@ -216,9 +400,6 @@ int test_exhausterr()
 
 int test_morelimits()
 {
-	printf("(char)0: %d\n", (char)0);
-	printf("~((char)0): %d\n", ~((char)0));
-	printf("(~((char)0))>>1: %d\n", (~((char)0))>>1);
 	printf("MAX_UNSIGNED(unsigned char): %u\n", Z_MAX_UNSIGNED(unsigned char));
 	printf("MAX_SIGNED(char): %d\n", Z_MAX_SIGNED(char));
 
@@ -274,6 +455,8 @@ int test_morelimits()
 
 int main(int argv, char**argc)
 {
+	test_FITS_INTO_SIGNED_INT();
+	test_overflow();
 	test_GCC_doc_suggestion();
 	test_morelimits();
 	test_gcc_ifexpr();

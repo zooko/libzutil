@@ -6,8 +6,11 @@ LIBSUFFIX=.a
 RANLIB=ranlib
 AR=ar
 
-# CFLAGS=-ansi -pedantic -std=c89 -Wall -O0
-CFLAGS=-Wall -O0 -Wsigned-compare
+CFLAGS_FOR_LIBRARY=-ansi -pedantic -std=c89 -Wall -O9
+CFLAGS_FOR_TEST=-Wall -O0 -DNDEBUG
+# I would like to set these pedantic flags when compiling the library but not when compiling the test, but that would require writing my own .c -> .o rule...  So I just comment these lines in and out when compiling.  --Zooko 2002-09-03
+# CFLAGS=$(CFLAGS_FOR_LIBRARY)
+CFLAGS=$(CFLAGS_FOR_TEST)
 
 # SRCS=$(wildcard *.c)
 SRCS=zutil.c exhaust.c
