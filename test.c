@@ -1209,6 +1209,16 @@ void print_morelimits() {
 	printf("Z_LLONG_MIN:                   %40lld\n", Z_LLONG_MIN);
 }
 
+int test_uint32_code()
+{
+	unsigned int res;
+	zbyte bs[4];
+	uint32_encode(42, bs);
+	res = uint32_decode(bs);
+	assert(res == 42);
+	return 0;
+}
+
 int test() {
 	/*print_morelimits();*/
 	test_FITS_INTO_SIGNED_INT();
@@ -1220,6 +1230,7 @@ int test() {
 	test_MAX();
 	test_minmax_fast();
 	/*test_exhausterr();*/
+	test_uint32_code();
 	return 0;
 }
 
