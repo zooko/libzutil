@@ -6,6 +6,7 @@ LIBSUFFIX=.a
 RANLIB=ranlib
 AR=ar
 
+# CFLAGS=-ansi -pedantic -std=c89 -Wall -O0
 CFLAGS=-Wall -O0
 
 # SRCS=$(wildcard *.c)

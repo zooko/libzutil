@@ -48,6 +48,7 @@ int test_minmax_strict_badargs()
 }
 */
 
+/*
 int test_minmax_strict()
 {
 	int x = 2;
@@ -90,38 +91,88 @@ int test_minmax_strict()
 	}
 	return 0;
 }
+*/
 
-int test_minmax_lenient()
+int test_minmax_unsafe()
 {
-	int a, res, x;
-	unsigned int z;
-	long double q, ldres;
-	/*
-	if (test_minmax_picky()) {
+	int a;
+	unsigned int b;
+	a = 3;
+	b = -1;
+	if (MIN(a, b) != -1) {
+		printf("failed test MIN(%d, %d) != %d\n", a, b, -1);
 		return -1;
 	}
-	*/
+	return 0;
+}
+
+int test_gcc_ifexpr()
+{
+	int i;
+	unsigned int u;
+	const typeof(1>0?i:u) _res = 1>0?i:u;
+	const typeof(u) _u = u;
+	/* Now by ANSI C rules, the expression `1>0?i:u' must have typed unsigned int! */
+	if (&_res==&_u) {
+		/* That `==' is just to elicit a compiler error if they are of different types... */
+		return 2;
+	}
+	return 0;
+}
+
+int test_minmax_flexible()
+{
+	int a, res, x;
+	unsigned int u;
+	long double q, ldres;
 
 	a = -2;
-	z = 3;
-	
-	res = MIN(a, z);
-	if (res != -2) {
-		printf("failed test MIN(%d, %d) != %d\n", a, z, -2);
+	u = 3;
+
+	if (MIN(a, u) > -1) {
+		printf("failed test MIN(%d, %d): %d == %u > -1\n", a, u, MIN(a, u), MIN(a, u));
+		return -1;
+	}
+	if (MIN(a, u) < -3) {
+		printf("failed test MIN(%d, %d): %d == %u < -3\n", a, u, MIN(a, u), MIN(a, u));
+		return -1;
+	}
+	if (MIN(a, u) != -2) {
+		printf("failed test MIN(%d, %d) == %d == %u != %d\n", a, u, MIN(a, u), MIN(a, u), -2);
+		return -1;
+	}
+	if (MIN(a, u) > a) {
+		printf("failed test MIN(%d, %d) == %d == %u > %d == %u\n", a, u, MIN(a, u), MIN(a, u), a, a);
+		return -1;
+	}
+	if (MIN(a, u) > u) {
+		printf("failed test MIN(%d, %d) == %d == %u > %d == %u\n", a, u, MIN(a, u), MIN(a, u), u, u);
+		return -1;
+	}
+	if (MIN(a, u) > 0) {
+		printf("failed test MIN(%d, %d) == %d == %u > 0\n", a, u, MIN(a, u), MIN(a, u));
+		return -1;
+	}
+
+	a = 4;
+	u = 3;
+	res = MIN(a, u);
+	if (res != 3) {
+		printf("failed test MIN(%d, %d) != %d\n", a, u, 3);
 		return -1;
 	}
 
 	q = 3.14159;
 
-	ldres = MIN(z, q);
+	ldres = MIN(u, q);
 	if ((int)ldres != 3) {
-		printf("failed test MIN(%d, %Lf) != %d\n", z, q, 3);
+		printf("failed test MIN(%d, %Lf) != %d\n", u, q, 3);
 		return -1;
 	}
 
-	res = MIN(z, q);
+	res = MIN(u, q);
 	if (res != 3) {
-		printf("failed test MIN(%d, %Lf) != %d\n", z, q, 3);
+		printf("failed test MIN(%d, %Lf) != %d\n", u, q, 3);
 		return -1;
 	}
 
@@ -133,13 +184,12 @@ int test_minmax_lenient()
 	}
 
 	ldres = MIN(a, q);
-	if (ldres != -2) {
-		printf("failed test MIN(%d, %Lf): %Lf != %d\n", a, q, ldres, -2);
+	if (ldres != 3.14159) {
+		printf("failed test MIN(%d, %Lf): %Lf != %f\n", a, q, ldres, 3.14159);
 		return -1;
 	}
 	return 0;
 }
-
 
 int test_natlong()
 {
@@ -210,8 +260,13 @@ int test_morelimits()
 
 int main(int argv, char**argc)
 {
-  /*	test_minmax_lenient();*/
-	test_minmax_strict();
+	test_gcc_ifexpr();
+	test_minmax_flexible();
+
+/*	test_minmax_unsafe();*/
+
+/*	test_minmax_flexible_crazybadargs();*/
+  /*		test_minmax_strict();*/
 	/*test_minmax_strict_badargs();*/
 	/*test_natlong();*/
 	/*test_morelimits();*/

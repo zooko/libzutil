@@ -70,7 +70,8 @@
  * you write `MIN_FLEXIBLE(0, 3.14159)', then the value is an int, but if you write 
  * `MIN_FLEXIBLE(4, 3.14159)' then the value is a float.
  */
-#define MIN_FLEXIBLE(x, y) (((x)<0&&(y)>=0)?(x):((y)<0)?(y):((x)<(y))?(x):(y))
+#error "arghj -- this is all wrong.  C has defeated me."
+#define MIN_FLEXIBLE(x, y) (((x)<0&&(y)>=0)?(x):(((y)<0&&(x)>=0)?(y):(((x)<(y))?(x):(y))))
 #define MAX_FLEXIBLE(x, y) (((x)>0&&(y)<=0)?(x):((y)>0)?(y):((x)>(y))?(x):(y))
 
 /**
