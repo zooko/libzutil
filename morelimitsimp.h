@@ -14,13 +14,13 @@
    implementation where the maximum value of a signed type (called typ) is 
    equal to 2^(sizeof(typ)*CHAR_BIT) - 1, and the minimum value of a signed 
    type is equal to the -1*(maximum value+1). */
-#define Z_SIGNED_HIGH_BIT(typ) ((typ)((typ)1<<((sizeof(typ)*CHAR_BIT)-2)))
+#define Z_SIGNED_HIGH_BIT(typ) ((typ)((typ)1 << ((sizeof(typ)*CHAR_BIT)-2)))
 #define Z_SIGNED_LOW_BITS(typ) ((typ)((Z_SIGNED_HIGH_BIT(typ))-1))
 #define Z_MAX_SIGNED(typ) ((typ)(Z_SIGNED_HIGH_BIT(typ) + Z_SIGNED_LOW_BITS(typ)))
 #define Z_MIN_SIGNED(typ) ((typ)((-Z_MAX_SIGNED(typ))-1))
 
-#define Z_MAX(typ) ((Z_MAX_SIGNED(typ)>Z_MAX_UNSIGNED(typ))?Z_MAX_SIGNED(typ):Z_MAX_UNSIGNED(typ))
-#define Z_MIN(typ) ((Z_MIN_SIGNED(typ)<Z_MIN_UNSIGNED(typ))?Z_MIN_SIGNED(typ):Z_MIN_UNSIGNED(typ))
+#define Z_MAX(typ) ((Z_MAX_SIGNED(typ) > Z_MAX_UNSIGNED(typ))?Z_MAX_SIGNED(typ):Z_MAX_UNSIGNED(typ))
+#define Z_MIN(typ) ((Z_MIN_SIGNED(typ) < Z_MIN_UNSIGNED(typ))?Z_MIN_SIGNED(typ):Z_MIN_UNSIGNED(typ))
 
 #endif /* #ifndef __INCL_morelimitsimp_h */
 

@@ -27,7 +27,7 @@
 #define OPERAND_PROMOTES_TO_SIGNED_TYPE(x) ((Z_ZERO_VAL(x) - Z_UNIT_VAL(x)) < Z_ZERO_VAL(x))
 
 #define ADD_WOULD_OVERFLOW_typ(x, y, typ) ((((x) > 0) && ((y) > 0) && ((Z_MAX(typ) - (x)) < (y))) || (((x) < 0) && ((y) < 0) && ((Z_MIN(typ) - (x)) > (y))))
-#define ADD_WOULD_OVERFLOW_Utyp(x, y, typ) (((typ)((x)+(y)))<(x))
+#define ADD_WOULD_OVERFLOW_Utyp(x, y, typ) (((typ)((x)+(y))) < (x))
 
 #define MACRO_ADD_WOULD_OVERFLOW_CHAR(x, y) ADD_WOULD_OVERFLOW_typ(x, y, char)
 #define MACRO_ADD_WOULD_OVERFLOW_SHRT(x, y) ADD_WOULD_OVERFLOW_typ(x, y, short)

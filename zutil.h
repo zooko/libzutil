@@ -11,15 +11,14 @@
 #include "minmax.h"
 #include "morelimits.h"
 
-#include <limits.h>
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.7 2003/12/13 17:46:57 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.8 2003/12/14 17:48:59 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 2;
-static char const* const zutil_vernum = "0.9.2";
+static int const zutil_vermicro = 3;
+static char const* const zutil_vernum = "0.9.3";
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 

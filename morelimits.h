@@ -10,10 +10,11 @@
 #include "morelimitsimp.h" /* implementation stuff that you needn't see in order to use the library */
 
 #include <stddef.h>
+#include <limits.h>
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.4 2003/08/09 13:19:53 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.5 2003/12/14 17:48:59 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;

@@ -2,12 +2,11 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <limits.h>
 #include <time.h>
+#include <assert.h>
+#include <limits.h>
 
 #include "zutil.h"
-
-#include <assert.h>
 
 int test_overflow()
 {
@@ -401,7 +400,7 @@ int test_minmax_fast()
 }
 
 int _test_MIN_smallerint_biggeruint(int i, unsigned u) {
-	if (MIN(i, u) >= u) {
+	if (MIN(i, u) >= ((signed long long)(u))) {
 		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL >= u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
 	if (MIN(i, u) > i) {
@@ -554,10 +553,10 @@ int _test_MIN_biggerlong_smallerullong(long i, unsigned long long u) {
 	if (MIN(i, u) >= i) {
 		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL >= i == %ld\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
-	if (MIN(i, u) > u) {
+	if ((unsigned long long)MIN(i, u) > u) {
 		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL > u == %lluLLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
-	if (MIN(i, u) != u) {
+	if ((unsigned long long)MIN(i, u) != u) {
 		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL != u == %lluLLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
 	return 0;
@@ -570,11 +569,42 @@ int _test_MAX_biggerlong_smallerullong(long i, unsigned long long u) {
 	if (MAX(i, u) <= u) {
 		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU <= u == %lluLLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
-	if (MAX(i, u) < i) {
+	if ((long)MAX(i, u) < i) {
 		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
-	if (MAX(i, u) != i) {
+	if ((long)MAX(i, u) != i) {
 		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+	}
+	return 0;
+}
+
+int _test_MIN_smallerlong_biggerullong(long i, unsigned long long u) {
+	if ((unsigned long long)MIN(i, u) >= u) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL >= u == %lluLLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
+	}
+	if (MIN(i, u) < i) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL < i == %ldL\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
+	}
+	if (MIN(i, u) != i) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL != i == %ldL\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
+	}
+	return 0;
+}
+
+int _test_MAX_smallerlong_biggerullong(long i, unsigned long long u) {
+	if (MAX(i, u) < 0) {
+		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU < 0\n", __LINE__, i, u, MAX(i, u), MAX(i, u));
+	}
+	if (i >= 0) {
+		if (MAX(i, u) < (unsigned long long)i) {
+			printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		}
+	}
+	if (MAX(i, u) < u) {
+		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU < u == %lluLLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+	}
+	if (MAX(i, u) != u) {
+		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU != u == %lluLLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
@@ -623,13 +653,14 @@ int _test_MIN_hugeullong_hugerullong(unsigned long long u1, unsigned long long u
 	/*if (MIN(u1, u2) < 0) {
 		printf("failed test %d as expected MIN(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2));
 	}*/
-	if (MIN(u1, u2) >= u2) {
+	/* XXX actually the following casts to (unsigned long long) are cheating -- C standard doesn't guarantee that we'll get the right answer here. */
+	if ((unsigned long long)MIN(u1, u2) >= u2) {
 		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL >= u2 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u2);
 	}
-	if (MIN(u1, u2) > u1) {
+	if ((unsigned long long)MIN(u1, u2) > u1) {
 		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL > u1 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u1);
 	}
-	if (MIN(u1, u2) != u1) {
+	if ((unsigned long long)MIN(u1, u2) != u1) {
 		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL != u1 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u1);
 	}
 	return 0;
@@ -655,13 +686,14 @@ int _test_MIN_hugerullong_hugeullong(unsigned long long u1, unsigned long long u
 	/*if (MIN(u1, u2) < 0) {
 		printf("failed test %d as expected MIN(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2));
 	}*/
-	if (MIN(u1, u2) >= u1) {
+	/* XXX actually the following casts to (unsigned long long) are cheating -- C standard doesn't guarantee that we'll get the right answer here. */
+	if ((unsigned long long)MIN(u1, u2) >= u1) {
 		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL >= u1 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u1);
 	}
-	if (MIN(u1, u2) > u2) {
+	if ((unsigned long long)MIN(u1, u2) > u2) {
 		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL > u2 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u2);
 	}
-	if (MIN(u1, u2) != u2) {
+	if ((unsigned long long)MIN(u1, u2) != u2) {
 		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL != u2 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u2);
 	}
 	return 0;
@@ -881,6 +913,38 @@ int _test_various_MAX_biggerlong_smallerullong() {
 	return 0;
 }
 
+int _test_various_MIN_smallerlong_biggerullong() {
+	_test_MIN_smallerlong_biggerullong(0, 10);
+	_test_MIN_smallerlong_biggerullong(0, 20);
+	_test_MIN_smallerlong_biggerullong(0, INT_MAX);
+	_test_MIN_smallerlong_biggerullong(0, LONG_MAX);
+
+	_test_MIN_smallerlong_biggerullong(2, 3);
+
+	_test_MIN_smallerlong_biggerullong(LONG_MAX-1, LONG_MAX);
+	_test_MIN_smallerlong_biggerullong(LONG_MAX-2, LONG_MAX-1);
+	_test_MIN_smallerlong_biggerullong(INT_MAX-1, INT_MAX);
+	_test_MIN_smallerlong_biggerullong(INT_MAX-2, INT_MAX-1);
+
+	return 0;
+}
+
+int _test_various_MAX_smallerlong_biggerullong() {
+	_test_MAX_smallerlong_biggerullong(0, 1);
+	_test_MAX_smallerlong_biggerullong(0, 2);
+	_test_MAX_smallerlong_biggerullong(0, INT_MAX);
+	_test_MAX_smallerlong_biggerullong(0, LONG_MAX);
+
+	_test_MAX_smallerlong_biggerullong(2, 3);
+
+	_test_MAX_smallerlong_biggerullong(LONG_MAX-1, LONG_MAX);
+	_test_MAX_smallerlong_biggerullong(LONG_MAX-2, LONG_MAX-1);
+	_test_MAX_smallerlong_biggerullong(INT_MAX-1, INT_MAX);
+	_test_MAX_smallerlong_biggerullong(INT_MAX-2, INT_MAX-1);
+
+	return 0;
+}
+
 int _test_various_MIN_equalint_equaluint() {
 	_test_MIN_equalint_equaluint(0, 0);
 	_test_MIN_equalint_equaluint(1, 1);
@@ -979,6 +1043,7 @@ int test_MIN() {
 	_test_various_MIN_biggerint_smalleruint();
 	_test_various_MIN_biggerlong_smallerulong();
 	_test_various_MIN_biggerlong_smallerullong();
+	_test_various_MIN_smallerlong_biggerullong();
 	_test_various_MIN_equalint_equaluint();
 	_test_various_MIN_equallong_equalulong();
 	_test_various_MIN_hugeullong_hugerullong();
@@ -1045,6 +1110,7 @@ void test_MAX() {
 	_test_various_MAX_biggerint_smalleruint();
 	_test_various_MAX_biggerlong_smallerulong();
 	_test_various_MAX_biggerlong_smallerullong();
+	_test_various_MAX_smallerlong_biggerullong();
 	_test_various_MAX_equalint_equaluint();
 	_test_various_MAX_equallong_equalulong();
 	_test_various_MAX_hugeullong_hugerullong();

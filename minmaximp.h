@@ -14,8 +14,8 @@
  * and the other is of a type that doesn't promote to a signed type, you'll get 
  * the wrong answer.  
  */
-#define _MIN_UNSAFE(x, y) ((x)<(y)?(x):(y))
-#define _MAX_UNSAFE(x, y) ((x)>(y)?(x):(y))
+#define _MIN_UNSAFE(x, y) ((x) < (y)?(x):(y))
+#define _MAX_UNSAFE(x, y) ((x) > (y)?(x):(y))
 
 /**
  * This macro just does what you expect.  It evaluates to the largest of the 
@@ -30,7 +30,7 @@
  * isn't a simple rule of "compare memory addresses numerically".)
  */
 /* _MAX_SAFE is just for pedantic and verification purposes -- we use _FASTER_MAX_SAFE in practice. */
-#define _MAX_SAFE(x, y) (((x)>=0&&(y)<0)?(x):(((y)>=0&&(x)<0)?(y):(((x)>(y))?(x):(y))))
+#define _MAX_SAFE(x, y) (((x) >= 0&&(y) < 0)?(x):(((y) >= 0&&(x) < 0)?(y):(((x) > (y))?(x):(y))))
 
 /**
  * This handy-dandy _FASTER_MAX_SAFE macro is almost as fast as _MAX_UNSAFE 
@@ -41,12 +41,17 @@
  * than _MAX_SAFE in some other cases.
  */
 #define _PROMOTE_NONLL_TO_LLS(x) \
-    ((sizeof(x)<sizeof(long long)) ? \
+    ((sizeof(x) < sizeof(long long)) ? \
         ((signed long long)(x)) : \
         (x))
 
 #define _MAX_UNSAFE_LLS(x, y) \
-    ((x)>(y) ? \
+    ((((signed long long)(x)) > ((signed long long)(y))) ? \
+        _PROMOTE_NONLL_TO_LLS(x) : \
+        _PROMOTE_NONLL_TO_LLS(y))
+
+#define _MAX_UNSAFE_LLU(x, y) \
+    ((((unsigned long long)(x)) > ((unsigned long long)(y))) ? \
         _PROMOTE_NONLL_TO_LLS(x) : \
         _PROMOTE_NONLL_TO_LLS(y))
 
@@ -54,14 +59,14 @@
     (OPERAND_PROMOTES_TO_SIGNED_TYPE(x) ? \
         (OPERAND_PROMOTES_TO_SIGNED_TYPE(y) ? \
             _MAX_UNSAFE_LLS(x, y) : \
-            (((x)<0) ? \
+            (((x) < 0) ? \
                 _PROMOTE_NONLL_TO_LLS(y) : \
-                _MAX_UNSAFE_LLS(x, y))) : \
+                _MAX_UNSAFE_LLU(x, y))) : \
         (OPERAND_PROMOTES_TO_SIGNED_TYPE(y) ? \
-            (((y)<0) ? \
+            (((y) < 0) ? \
                 _PROMOTE_NONLL_TO_LLS(x) : \
-                _MAX_UNSAFE_LLS(x, y)) : \
-            _MAX_UNSAFE_LLS(x, y)))
+                _MAX_UNSAFE_LLU(x, y)) : \
+            _MAX_UNSAFE_LLU(x, y)))
 
 #define _RAISE_EXCEPTION ((signed long long)(1/0)) /* If you are wondering why you just got a divide-by-zero exception, it is because this code was compiled in debug mode (the NDEBUG flag was not set) there is a MIN macro being used where it cannot give the right answer, either because the answer is negative and the type of the expression is unsigned, or because the answer is greater than LLONG_MAX and the type of the expression is signed long long.  Please see minmax.h for information on how to use these MIN macros safely. */
 
@@ -80,10 +85,10 @@
 #define OPERAND_IS_LLU(x) ((sizeof(x) > sizeof(long)) && (!OPERAND_PROMOTES_TO_SIGNED_TYPE(x))) 
 /* We define OPERAND_EXCEEDS_LLONG_MAX in this funny way in order to trick gcc into not giving warnings about comparisons being useless due to the limited range of datatypes. */
 #define OPERAND_EXCEEDS_LLONG_MAX(x) ((ULLONG_MAX - (x)) < (ULLONG_MAX - LLONG_MAX))
-#define _MIN_LLS_FLEX(x, y) (((x)<0&&(y)>=0)?((long long)(x)):(((y)<0&&(x)>=0)?((long long)(y)):(((x)<(y))?((long long)(x)):((long long)(y)))))
+#define _MIN_LLS_FLEX(x, y) (((x) < 0&&(y) >= 0)?((long long)(x)):(((y) < 0&&(x) >= 0)?((long long)(y)):(((x) < (y))?((long long)(x)):((long long)(y)))))
 /* _MIN_LLS_CHECK is just for pedantic and verification purposes -- we use _FASTER_MIN_LLS_CHECK in practice. */
 #define _MIN_LLS_UNSAFE(x, y) \
-    ((((signed long long)(x))<((signed long long)(y))) ? \
+    ((((signed long long)(x)) < ((signed long long)(y))) ? \
         ((signed long long)(x)) : \
         ((signed long long)(y)))
 #define _MIN_LLS_CHECK(x, y) \
@@ -111,18 +116,18 @@
 #define _FASTER_MIN_LLS_FLEX(x, y) \
     (OPERAND_IS_LLU(x) ? \
         (OPERAND_IS_LLU(y) ? \
-            (((x)<(y)) ? \
+            ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
                 ((signed long long)(x)) : \
                 ((signed long long)(y))) : \
-            (((y)<0) ? \
+            (((y) < 0) ? \
                 ((signed long long)(y)) : \
-                (((x)<(y)) ? \
+                ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
                     ((signed long long)(x)) : \
                     ((signed long long)(y))))) : \
         (OPERAND_IS_LLU(y) ? \
-            (((x)<0) ? \
+            (((x) < 0) ? \
                 ((signed long long)(x)) : \
-                (((x)<(y)) ? \
+                ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
                     ((signed long long)(x)) : \
                     ((signed long long)(y)))) : \
             _MIN_LLS_UNSAFE(x, y)))
@@ -150,7 +155,7 @@
  * (Although I guess that this will work on almost all platforms in practice.)
  */
 #define _MIN_LLU_UNSAFE(x, y) \
-    ((((unsigned long long)(x))<((unsigned long long)(y))) ? \
+    ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
         ((unsigned long long)(x)) : \
         ((unsigned long long)(y)))
 
