@@ -28,16 +28,13 @@ unsigned long UINT32_DECODE(const zbyte* const bs)
 }
 
 #undef uint32_encode
-void uint32_encode(unsigned int u, zbyte* const bs)
+void uint32_encode(const unsigned int u, zbyte* const bs)
 {
-	runtime_assert(u <= Z_UINT32_MAX, "Cannot encode a number this into 32 bits.");
+	runtime_assert(u <= Z_UINT32_MAX, "Cannot encode a number this big into 32 bits.");
 	bs[3] = u % (1U << 8);
-	u /= (1U << 8);
-	bs[2] = u % (1U << 8);
-	u /= (1U << 8);
-	bs[1] = u % (1U << 8);
-	u /= (1U << 8);
-	bs[0] = u;
+	bs[2] = (u / (1U << 8)) % (1U << 8);
+	bs[1] = (u / (1U << 16)) % (1U << 8);
+	bs[0] = (u / (1U << 24)) % (1U << 8);
 }
 
 #undef divceil

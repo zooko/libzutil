@@ -62,6 +62,16 @@ int test_uint32_encode()
 	return 1;
 }
 
+void bench_uint32_encode()
+{
+	unsigned i;
+	for (i = 0; i < 1000000; i++) {
+		if (! test_uint32_encode()) {
+			printf("what ???\n");
+		}
+	}
+}
+
 int test_overflow()
 {
 	assert (add_would_overflow_char(CHAR_MAX - 2, CHAR_MAX - 3));
@@ -1333,4 +1343,11 @@ int bench() {
 int main(int argv, char**argc) {
 	return test();
 }
+
+/*int main(int argv, char**argc) {
+	bench_uint32_encode();
+	return 1;
+	}*/
+
+
 
