@@ -90,3 +90,32 @@ void _verbose_abort8(char const*const filename, const int lineno, char const*con
 	fprintf(stderr, "%s: %d: %s: %s%s%s%s%s%s%s%s", filename, lineno, funcname, msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8);
 	exit(EXIT_FAILURE);
 }
+
+void _verbose_abort9(char const*const filename, const int lineno, char const*const funcname, char const* msg1, char const* msg2, char const* msg3, char const* msg4, char const* msg5, char const* msg6, char const* msg7, char const* msg8, char const* msg9) {
+	if (msg1 == NULL) { msg1 = ""; }
+	if (msg2 == NULL) { msg2 = ""; }
+	if (msg3 == NULL) { msg3 = ""; }
+	if (msg4 == NULL) { msg4 = ""; }
+	if (msg5 == NULL) { msg5 = ""; }
+	if (msg6 == NULL) { msg6 = ""; }
+	if (msg7 == NULL) { msg7 = ""; }
+	if (msg8 == NULL) { msg8 = ""; }
+	if (msg9 == NULL) { msg9 = ""; }
+	fprintf(stderr, "%s: %d: %s: %s%s%s%s%s%s%s%s%s", filename, lineno, funcname, msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9);
+	exit(EXIT_FAILURE);
+}
+
+void _verbose_abort10(char const*const filename, const int lineno, char const*const funcname, char const* msg1, char const* msg2, char const* msg3, char const* msg4, char const* msg5, char const* msg6, char const* msg7, char const* msg8, char const* msg9, char const* msg10) {
+	if (msg1 == NULL) { msg1 = ""; }
+	if (msg2 == NULL) { msg2 = ""; }
+	if (msg3 == NULL) { msg3 = ""; }
+	if (msg4 == NULL) { msg4 = ""; }
+	if (msg5 == NULL) { msg5 = ""; }
+	if (msg6 == NULL) { msg6 = ""; }
+	if (msg7 == NULL) { msg7 = ""; }
+	if (msg8 == NULL) { msg8 = ""; }
+	if (msg9 == NULL) { msg9 = ""; }
+	if (msg10 == NULL) { msg10 = ""; }
+	fprintf(stderr, "%s: %d: %s: %s%s%s%s%s%s%s%s%s%s", filename, lineno, funcname, msg1, msg2, msg3, msg4, msg5, msg6, msg7, msg8, msg9, msg10);
+	exit(EXIT_FAILURE);
+}

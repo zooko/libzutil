@@ -28,13 +28,39 @@ unsigned long UINT32_DECODE(const zbyte* const bs)
 }
 
 #undef uint32_encode
-void uint32_encode(const unsigned int u, zbyte* const bs)
+void uint32_encode(const unsigned long lu, zbyte* const bs)
 {
-	runtime_assert(u <= Z_UINT32_MAX, "Cannot encode a number this big into 32 bits.");
-	bs[3] = u % (1U << 8);
-	bs[2] = (u / (1U << 8)) % (1U << 8);
-	bs[1] = (u / (1U << 16)) % (1U << 8);
-	bs[0] = (u / (1U << 24)) % (1U << 8);
+	runtime_assert(lu <= Z_UINT32_MAX, "Cannot encode a number this big into 32 bits.");
+	bs[3] = lu % (1U << 8);
+	bs[2] = (lu / (1U << 8)) % (1U << 8);
+	bs[1] = (lu / (1LU << 16)) % (1U << 8);
+	bs[0] = (lu / (1LU << 24)) % (1U << 8);
+}
+
+#undef uint64_decode
+unsigned long long uint64_decode(const zbyte* const bs)
+{
+	return ((unsigned long long)(bs[7])) | ((unsigned long long)(bs[6])) << 8 | ((unsigned long long)(bs[5])) << 16 | ((unsigned long long)(bs[4])) << 24 | ((unsigned long long)(bs[3])) << 32 | ((unsigned long long)(bs[2])) << 40 | ((unsigned long long)(bs[1])) << 48 | ((unsigned long long)(bs[0])) << 56;
+}
+
+#undef UINT64_DECODE
+unsigned long long UINT64_DECODE(const zbyte* const bs)
+{
+	return ((unsigned long long)(bs[7])) | ((unsigned long long)(bs[6])) << 8 | ((unsigned long long)(bs[5])) << 16 | ((unsigned long long)(bs[4])) << 24 | ((unsigned long long)(bs[3])) << 32 | ((unsigned long long)(bs[2])) << 40 | ((unsigned long long)(bs[1])) << 48 | ((unsigned long long)(bs[0])) << 56;
+}
+
+#undef uint64_encode
+void uint64_encode(const unsigned long long llu, zbyte* const bs)
+{
+	runtime_assert(llu <= Z_UINT64_MAX, "Cannot encode a number this big into 64 bits.");
+	bs[7] = llu % (1U << 8);
+	bs[6] = (llu / (1U << 8)) % (1U << 8);
+	bs[5] = (llu / (1LU << 16)) % (1U << 8);
+	bs[4] = (llu / (1LU << 24)) % (1U << 8);
+	bs[3] = (llu / (1LLU << 32)) % (1U << 8);
+	bs[2] = (llu / (1LLU << 40)) % (1U << 8);
+	bs[1] = (llu / (1LLU << 48)) % (1U << 8);
+	bs[0] = (llu / (1LLU << 56)) % (1U << 8);
 }
 
 #undef divceil

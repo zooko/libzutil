@@ -19,12 +19,12 @@
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.17 2004/03/20 00:28:20 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.18 2004/05/07 15:58:59 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 14;
-static char const* const zutil_vernum = "0.9.14";
+static int const zutil_vermicro = 15;
+static char const* const zutil_vernum = "0.9.15";
 
 #ifndef __cplusplus
 typedef int bool;
@@ -39,7 +39,7 @@ typedef int bool;
 typedef unsigned char zbyte;
 
 /**
- * Decode a four bytes into an unsigned int.  bs points to a buffer which must 
+ * Decode four bytes into an unsigned int.  bs points to a buffer which must 
  * have (at least) four elements; the first four elements of bs contain the 
  * encoding of the unsigned integer in big-endian format.
  */
@@ -47,14 +47,32 @@ unsigned long uint32_decode(const zbyte* bs);
 unsigned long UINT32_DECODE(const zbyte* bs);
 
 /**
+ * Decode eight bytes into an unsigned int.  bs points to a buffer which must 
+ * have (at least) eight elements; the first eight elements of bs contain the 
+ * encoding of the unsigned integer in big-endian format.
+ */
+unsigned long long uint64_decode(const zbyte* bs);
+unsigned long long UINT64_DECODE(const zbyte* bs);
+
+/**
  * Encode an unsigned int into four zbytes in big-endian format.  Aborts (via 
  * runtime_assert()) if the value is too large to encode into 32 bits (that is, 
  * if it is >= 2^32).
  *
- * @param u: the value to encode
+ * @param lu: the value to encode
  * @param bs: pointer to the first byte of an array of at least four zbytes
  */
-void uint32_encode(unsigned int u, zbyte* bs);
+void uint32_encode(unsigned long lu, zbyte* bs);
+
+/**
+ * Encode an unsigned int into eight zbytes in big-endian format.  Aborts (via 
+ * runtime_assert()) if the value is too large to encode into 64 bits (that is, 
+ * if it is >= 2^64).
+ *
+ * @param lu: the value to encode
+ * @param bs: pointer to the first byte of an array of at least eight zbytes
+ */
+void uint64_encode(unsigned long long llu, zbyte* bs);
 
 /*
 Returns ceil(x/y): the smallest integer which is greater than or equal to x/y.

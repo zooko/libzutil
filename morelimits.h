@@ -18,7 +18,7 @@
 #include <stddef.h>
 #include <limits.h>
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.10 2004/03/20 00:28:20 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.11 2004/05/07 15:58:59 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;
@@ -36,6 +36,13 @@ static char const* const morelimits_vernum = "0.9.2";
 #endif
 #ifndef SIZE_T_MIN
 #define SIZE_T_MIN Z_SIZE_T_MIN
+#endif
+
+#ifndef SIZE_MAX
+#define SIZE_MAX Z_SIZE_T_MAX
+#endif
+#ifndef SIZE_MIN
+#define SIZE_MIN Z_SIZE_T_MIN
 #endif
 
 #define Z_TIME_T_MAX Z_MAX(time_t)
@@ -87,6 +94,7 @@ static char const* const morelimits_vernum = "0.9.2";
 #define Z_UINT_MAX Z_MAX(unsigned int)
 #define Z_USHRT_MAX Z_MAX(unsigned short)
 #define Z_UCHAR_MAX Z_MAX(unsigned char)
+#define Z_BYTE_MAX Z_MAX(unsigned char)
 
 #define Z_LLONG_MAX Z_MAX(long long)
 #define Z_LONG_MAX Z_MAX(long)

@@ -28,7 +28,7 @@
    is basically the moral equivalent of arguments to the function, but we can't 
    use actual arguments without defining a different type of function pointer 
    for each combination of types of arguments. */
-typedef void* (*delegatefunc)(void* self, void* data) ;
+typedef void* (*delegatefunc)(void* self, void* data);
 
 typedef struct {
 	void* self;

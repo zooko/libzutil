@@ -20,15 +20,31 @@
 
 #include "zutil.h"
 
-int _help_test_uint32_encode(const unsigned long u)
+#ifdef NDEBUG
+#warning You are compiling test.c with NDEBUG set, and since the tests use assert() to verify the results, this means the tests will pass even if the code is wrong.
+#endif
+
+int _help_test_uint32_encode(const unsigned long lu)
 {
 	unsigned long r;
 	zbyte p[4];
-	/*printf("about to try; %lu ", u);*/
-	uint32_encode(u, p);
+	/*printf("about to try; %lu ", lu);*/
+	uint32_encode(lu, p);
 	r = uint32_decode(p);
-	assert(u == r);
+	assert(lu == r);
 	/*printf("== %lu\n", r);*/
+	return 1;
+}
+
+int _help_test_uint64_encode(const unsigned long long llu)
+{
+	unsigned long long r;
+	zbyte p[8];
+	/*printf("about to try; %llu ", llu);*/
+	uint64_encode(llu, p);
+	r = uint64_decode(p);
+	assert(llu == r);
+	/*printf("== %llu\n", r);*/
 	return 1;
 }
 
@@ -62,11 +78,56 @@ int test_uint32_encode()
 	return 1;
 }
 
+int test_uint64_encode()
+{
+	_help_test_uint64_encode(0);
+	_help_test_uint64_encode(1);
+	_help_test_uint64_encode(2);
+	_help_test_uint64_encode(24);
+	_help_test_uint64_encode(42);
+	_help_test_uint64_encode(53);
+	_help_test_uint64_encode(99);
+	_help_test_uint64_encode((1<<8)-2);
+	_help_test_uint64_encode((1<<8)-1);
+	_help_test_uint64_encode((1<<8));
+	_help_test_uint64_encode((1<<8)+1);
+	_help_test_uint64_encode((1<<8)+2);
+	_help_test_uint64_encode((1<<16)-2);
+	_help_test_uint64_encode((1<<16)-1);
+	_help_test_uint64_encode((1<<16));
+	_help_test_uint64_encode((1<<16)+1);
+	_help_test_uint64_encode((1<<16)+2);
+	_help_test_uint64_encode((1<<24)-2);
+	_help_test_uint64_encode((1<<24)-1);
+	_help_test_uint64_encode((1<<24));
+	_help_test_uint64_encode((1<<24)+1);
+	_help_test_uint64_encode((1<<24)+2);
+	_help_test_uint64_encode(Z_UINT32_MAX-2);
+	_help_test_uint64_encode(Z_UINT32_MAX-1);
+	_help_test_uint64_encode(Z_UINT32_MAX);
+	_help_test_uint64_encode(Z_UINT32_MAX+1LLU);
+	_help_test_uint64_encode(Z_UINT32_MAX+2LLU);
+	_help_test_uint64_encode(Z_UINT64_MAX-2);
+	_help_test_uint64_encode(Z_UINT64_MAX-1);
+	_help_test_uint64_encode(Z_UINT64_MAX);
+	return 1;
+}
+
 void bench_uint32_encode()
 {
 	unsigned i;
 	for (i = 0; i < 1000000; i++) {
 		if (! test_uint32_encode()) {
+			printf("what ???\n");
+		}
+	}
+}
+
+void bench_uint64_encode()
+{
+	unsigned i;
+	for (i = 0; i < 1000000; i++) {
+		if (! test_uint64_encode()) {
 			printf("what ???\n");
 		}
 	}
@@ -1320,6 +1381,7 @@ void print_morelimits() {
 int test() {
 	/*print_morelimits();*/
 	test_uint32_encode();
+	test_uint64_encode();
 	test_FITS_INTO_SIGNED_INT();
 	test_PROMOTES_TO_SIGNED_TYPE();
 	test_overflow();
