@@ -1,5 +1,5 @@
 /**
- * copyright 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
  * See the end of this file for the free software, open source license (BSD-style).
@@ -18,7 +18,7 @@ void _z_printerr_and_exit(const char*const msg, const char*const filename, unsig
 }
 
 /**
- * Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software to deal in this software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,

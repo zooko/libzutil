@@ -1,5 +1,5 @@
 /**
- * copyright 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
  * See the end of this file for the free software, open source license (BSD-style).
@@ -10,7 +10,10 @@
 #define Z_MAX_UNSIGNED(typ) ((typ)(~((typ)0)))
 #define Z_MIN_UNSIGNED(typ) ((typ)0)
 
-/* The following `Z_MAX_SIGNED' and `Z_MIN_SIGNED' macros will work on any C implementation where the maximum value of a signed type `typ' is equal to 2^(sizeof(typ)*CHAR_BIT) - 1, and the minimum value of a signed is equal to the -1*(maximum value+1). */
+/* The following Z_MAX_SIGNED and Z_MIN_SIGNED macros will work on any C 
+   implementation where the maximum value of a signed type (called typ) is 
+   equal to 2^(sizeof(typ)*CHAR_BIT) - 1, and the minimum value of a signed 
+   type is equal to the -1*(maximum value+1). */
 #define Z_SIGNED_HIGH_BIT(typ) ((typ)((typ)1<<((sizeof(typ)*CHAR_BIT)-2)))
 #define Z_SIGNED_LOW_BITS(typ) ((typ)((Z_SIGNED_HIGH_BIT(typ))-1))
 #define Z_MAX_SIGNED(typ) ((typ)(Z_SIGNED_HIGH_BIT(typ) + Z_SIGNED_LOW_BITS(typ)))
@@ -22,7 +25,7 @@
 #endif /* #ifndef __INCL_morelimitsimp_h */
 
 /**
- * Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software to deal in this software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,

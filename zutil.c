@@ -1,5 +1,5 @@
 /**
- * copyright 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
  * See the end of this file for the free software, open source license (BSD-style).
@@ -73,14 +73,14 @@ int ADD_WOULD_OVERFLOW_SCHAR(signed char x, signed char y) {
 	return MACRO_ADD_WOULD_OVERFLOW_SCHAR(x, y);
 }
 
-#undef add_would_overflow_short
-int add_would_overflow_short(short x, short y) {
-	return MACRO_ADD_WOULD_OVERFLOW_SHORT(x, y);
+#undef add_would_overflow_shrt
+int add_would_overflow_shrt(short x, short y) {
+	return MACRO_ADD_WOULD_OVERFLOW_SHRT(x, y);
 }
 
-#undef ADD_WOULD_OVERFLOW_USHORT
-int ADD_WOULD_OVERFLOW_USHORT(unsigned short x, unsigned short y) {
-	return MACRO_ADD_WOULD_OVERFLOW_USHORT(x, y);
+#undef ADD_WOULD_OVERFLOW_USHRT
+int ADD_WOULD_OVERFLOW_USHRT(unsigned short x, unsigned short y) {
+	return MACRO_ADD_WOULD_OVERFLOW_USHRT(x, y);
 }
 
 #undef add_would_overflow_int
@@ -123,23 +123,18 @@ int ADD_WOULD_OVERFLOW_ULONG(unsigned long x, unsigned long y) {
 	return MACRO_ADD_WOULD_OVERFLOW_ULONG(x, y);
 }
 
-/*
- * The following is not standard C.  If your compiler supports LONG LONG, then please patch this to somehow detect that during preprocessing and send me the patch.
- */
-#ifdef __GNUC__
 #undef add_would_overflow_longlong
 int add_would_overflow_longlong(long long x, long long y) {
-	return MACRO_ADD_WOULD_OVERFLOW_LONGLONG(x, y);
+	return MACRO_ADD_WOULD_OVERFLOW_LLONG(x, y);
 }
 
-#undef ADD_WOULD_OVERFLOW_ULONGLONG
-int ADD_WOULD_OVERFLOW_ULONGLONG(unsigned long long x, unsigned long long y) {
-	return MACRO_ADD_WOULD_OVERFLOW_ULONGLONG(x, y);
+#undef ADD_WOULD_OVERFLOW_ULLONG
+int ADD_WOULD_OVERFLOW_ULLONG(unsigned long long x, unsigned long long y) {
+	return MACRO_ADD_WOULD_OVERFLOW_ULLONG(x, y);
 }
-#endif /* #ifdef __GNUC__ */
 
 /**
- * Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software to deal in this software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,

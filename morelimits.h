@@ -1,5 +1,5 @@
 /**
- * copyright 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
  * See the end of this file for the free software, open source license (BSD-style).
@@ -13,65 +13,135 @@
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.3 2002/09/04 23:40:36 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.4 2003/08/09 13:19:53 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
-static int const morelimits_vermin = 1;
+static int const morelimits_vermin = 9;
 static int const morelimits_vermicro = 0;
-static char const* const morelimits_vernum = "0.1.0";
+static char const* const morelimits_vernum = "0.9.0";
 
 /*
  * The following are not defined in the standard C library's "limits.h", but they should be!
  */
-#define MAX_SIZE_T Z_MAX(size_t)
-#define MIN_SIZE_T Z_MIN(size_t)
+#define SIZE_T_MAX Z_MAX(size_t)
+#define SIZE_T_MIN Z_MIN(size_t)
 
-#define MAX_TIME_T Z_MAX(time_t)
-#define MIN_TIME_T Z_MIN(time_t)
-
-/*
- * The following are not defined in the standard C library's "limits.h", presumably because you could just write "0" instead.
- */
-#define MIN_ULONG Z_MIN(unsigned long)
-#define MIN_UINT Z_MIN(unsigned int)
-#define MIN_USHORT Z_MIN(unsigned short)
-#define MIN_UCHAR Z_MIN(unsigned char)
+#define TIME_T_MAX Z_MAX(time_t)
+#define TIME_T_MIN Z_MIN(time_t)
 
 /*
- * The following is not standard C.  If your compiler supports LONG LONG, then please patch this to somehow detect that during preprocessing and send me the patch.
+ * The following are not defined in the standard C library's "limits.h", 
+ * presumably because you could just write "0" instead.
  */
-#ifdef __GNUC__
-#define MAX_LONGLONG Z_MAX(long long)
-#define MIN_LONGLONG Z_MIN(long long)
-#define MAX_ULONGLONG Z_MAX(unsigned long long)
-#define MIN_ULONGLONG Z_MIN(unsigned long long)
-#endif /* #ifdef __GNUC__ */
+#define ULONG_MIN Z_MIN(unsigned long)
+#define UINT_MIN Z_MIN(unsigned int)
+#define USHRT_MIN Z_MIN(unsigned short)
+#define UCHAR_MIN Z_MIN(unsigned char)
+#define ULLONG_MIN Z_MIN(unsigned long long)
 
 /*
- * All of the following are defined in the standard C library's "limits.h" header, under different names.  They are included here just because I can.  Maybe someday you'll be on a machine with an incorrect or incomplete "limits.h" and you'll thank me.
+ * All of the following should be defined in the standard C library's "limits.h" 
+ * header.  They are included here because some limits.h's lack some of them 
+ * (the long long ones), and in order to check that my Z_MAX and Z_MIN macros 
+ * and your system's <limits.h> agree!  (test.c tests this.)
  */
-#define MAX_ULONG Z_MAX(unsigned long)
-#define MAX_UINT Z_MAX(unsigned int)
-#define MAX_USHORT Z_MAX(unsigned short)
-#define MAX_UCHAR Z_MAX(unsigned char)
+#define Z_ULLONG_MAX Z_MAX(unsigned long long)
+#define Z_ULONG_MAX Z_MAX(unsigned long)
+#define Z_UINT_MAX Z_MAX(unsigned int)
+#define Z_USHRT_MAX Z_MAX(unsigned short)
+#define Z_UCHAR_MAX Z_MAX(unsigned char)
 
-#define MAX_LONG Z_MAX(long)
-#define MAX_INT Z_MAX(int)
-#define MAX_SHORT Z_MAX(short)
-#define MAX_CHAR Z_MAX(char)
+#define Z_LLONG_MAX Z_MAX(long long)
+#define Z_LONG_MAX Z_MAX(long)
+#define Z_INT_MAX Z_MAX(int)
+#define Z_SHRT_MAX Z_MAX(short)
+#define Z_CHAR_MAX Z_MAX(char)
 
-#define MIN_LONG Z_MIN(long)
-#define MIN_INT Z_MIN(int)
-#define MIN_SHORT Z_MIN(short)
-#define MIN_CHAR Z_MIN(char)
+#define Z_LLONG_MIN Z_MIN(long long)
+#define Z_LONG_MIN Z_MIN(long)
+#define Z_INT_MIN Z_MIN(int)
+#define Z_SHRT_MIN Z_MIN(short)
+#define Z_CHAR_MIN Z_MIN(char)
 
-#define MAX_SCHAR Z_MAX(signed char)
-#define MIN_SCHAR Z_MIN(signed char)
+#define Z_SCHAR_MAX Z_MAX(signed char)
+#define Z_SCHAR_MIN Z_MIN(signed char)
+
+#ifndef ULLONG_MAX
+#define ULLONG_MAX Z_ULLONG_MAX
+#endif
+
+#ifndef ULONG_MAX
+#define ULONG_MAX Z_ULONG_MAX
+#endif
+
+#ifndef UINT_MAX
+#define UINT_MAX Z_UINT_MAX
+#endif
+
+#ifndef USHRT_MAX
+#define USHRT_MAX Z_USHRT_MAX
+#endif
+
+#ifndef USHRT_MAX
+#define USHRT_MAX Z_USHRT_MAX
+#endif
+
+#ifndef UCHAR_MAX
+#define UCHAR_MAX Z_UCHAR_MAX
+#endif
+
+#ifndef LLONG_MAX
+#define LLONG_MAX Z_LLONG_MAX
+#endif
+
+#ifndef LONG_MAX
+#define LONG_MAX Z_LONG_MAX
+#endif
+
+#ifndef INT_MAX
+#define INT_MAX Z_INT_MAX
+#endif
+
+#ifndef SHRT_MAX
+#define SHRT_MAX Z_SHRT_MAX
+#endif
+
+#ifndef CHAR_MAX
+#define CHAR_MAX Z_CHAR_MAX
+#endif
+
+#ifndef LLONG_MIN
+#define LLONG_MIN Z_LLONG_MIN
+#endif
+
+#ifndef LONG_MIN
+#define LONG_MIN Z_LONG_MIN
+#endif
+
+#ifndef INT_MIN
+#define INT_MIN Z_INT_MIN
+#endif
+
+#ifndef SHRT_MIN
+#define SHRT_MIN Z_SHRT_MIN
+#endif
+
+#ifndef CHAR_MIN
+#define CHAR_MIN Z_CHAR_MIN
+#endif
+
+#ifndef SCHAR_MAX
+#define SCHAR_MAX Z_SCHAR_MAX
+#endif
+
+#ifndef SCHAR_MIN
+#define SCHAR_MIN Z_SCHAR_MIN
+#endif
 
 #endif /* #ifndef __INCL_morelimits_h */
 
 /**
- * Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * Copyright (c) 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software to deal in this software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,

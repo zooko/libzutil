@@ -1,5 +1,5 @@
 /**
- * copyright 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
  * See the end of this file for the free software, open source license (BSD-style).
@@ -7,12 +7,12 @@
 #ifndef __INCL_exhaust_h
 #define __INCL_exhaust_h
 
-static char const* const exhaust_h_cvsid = "$Id: exhaust.h,v 1.1 2002/02/08 17:30:54 zooko Exp $";
+static char const* const exhaust_h_cvsid = "$Id: exhaust.h,v 1.2 2003/08/09 13:19:53 zooko Exp $";
 
 static int const exhaust_vermaj = 0;
-static int const exhaust_vermin = 1;
+static int const exhaust_vermin = 9;
 static int const exhaust_vermicro = 0;
-static char const* const exhaust_vernum = "0.1.0";
+static char const* const exhaust_vernum = "0.9.0";
 
 void _z_printerr_and_exit(const char*const msg, const char*const filename, unsigned long lineno);
 
@@ -22,16 +22,12 @@ void _z_printerr_and_exit(const char*const msg, const char*const filename, unsig
 
 #define CHECKMALLOCEXIT(x) if ((x) == NULL) EXHAUSTERR(#x)
 
-#ifdef Z_EXHAUST_EXIT
 #define CHECKMALLOC(x) CHECKMALLOCEXIT(x)
-#else
-#define CHECKMALLOC(x) ((void)0)
-#endif /* #ifdef Z_EXHAUST_EXIT */
 
 #endif /* #ifndef __INCL_exhaust_h */
 
 /**
- * Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software to deal in this software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish,
