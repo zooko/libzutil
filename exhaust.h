@@ -13,7 +13,7 @@
 #ifndef __INCL_exhaust_h
 #define __INCL_exhaust_h
 
-static char const* const exhaust_h_cvsid = "$Id: exhaust.h,v 1.4 2004/03/12 16:49:05 zooko Exp $";
+static char const* const exhaust_h_cvsid = "$Id: exhaust.h,v 1.5 2004/03/20 00:28:19 zooko Exp $";
 
 static int const exhaust_vermaj = 0;
 static int const exhaust_vermin = 9;
@@ -26,8 +26,10 @@ void _z_printerr_and_exit(const char*const msg, const char*const filename, unsig
 
 #define EXHAUSTERR(msg) ERRNEXIT("memory exhaustion: " msg " -- exiting")
 
-#define CHECKMALLOCEXIT(x) if ((x) == NULL) EXHAUSTERR(#x)
-
-#define CHECKMALLOC(x) CHECKMALLOCEXIT(x)
+#ifdef Z_EXHAUST_EXIT
+#define CHECKMALLOC(x) if ((x) == NULL) EXHAUSTERR(#x)
+#else
+#define CHECKMALLOC(x)
+#endif
 
 #endif /* #ifndef __INCL_exhaust_h */

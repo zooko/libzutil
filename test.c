@@ -20,6 +20,48 @@
 
 #include "zutil.h"
 
+int _help_test_uint32_encode(const unsigned long u)
+{
+	unsigned long r;
+	zbyte p[4];
+	/*printf("about to try; %lu ", u);*/
+	uint32_encode(u, p);
+	r = uint32_decode(p);
+	assert(u == r);
+	/*printf("== %lu\n", r);*/
+	return 1;
+}
+
+int test_uint32_encode()
+{
+	_help_test_uint32_encode(0);
+	_help_test_uint32_encode(1);
+	_help_test_uint32_encode(2);
+	_help_test_uint32_encode(24);
+	_help_test_uint32_encode(42);
+	_help_test_uint32_encode(53);
+	_help_test_uint32_encode(99);
+	_help_test_uint32_encode((1<<8)-2);
+	_help_test_uint32_encode((1<<8)-1);
+	_help_test_uint32_encode((1<<8));
+	_help_test_uint32_encode((1<<8)+1);
+	_help_test_uint32_encode((1<<8)+2);
+	_help_test_uint32_encode((1<<16)-2);
+	_help_test_uint32_encode((1<<16)-1);
+	_help_test_uint32_encode((1<<16));
+	_help_test_uint32_encode((1<<16)+1);
+	_help_test_uint32_encode((1<<16)+2);
+	_help_test_uint32_encode((1<<24)-2);
+	_help_test_uint32_encode((1<<24)-1);
+	_help_test_uint32_encode((1<<24));
+	_help_test_uint32_encode((1<<24)+1);
+	_help_test_uint32_encode((1<<24)+2);
+	_help_test_uint32_encode(Z_UINT32_MAX-2);
+	_help_test_uint32_encode(Z_UINT32_MAX-1);
+	_help_test_uint32_encode(Z_UINT32_MAX);
+	return 1;
+}
+
 int test_overflow()
 {
 	assert (add_would_overflow_char(CHAR_MAX - 2, CHAR_MAX - 3));
@@ -1192,6 +1234,7 @@ int test_morelimits()
 }
 
 void print_morelimits() {
+	printf("Z_MAX_VOIDP:                   %40llu\n", Z_MAX_VOIDP);
 	printf("Z_MAX_UNSIGNED(unsigned char): %40u\n", Z_MAX_UNSIGNED(unsigned char));
 	printf("Z_MAX_SIGNED(char):            %40d\n", Z_MAX_SIGNED(char));
 	printf("\n");
@@ -1265,7 +1308,8 @@ void print_morelimits() {
 }
 
 int test() {
-	print_morelimits();
+	/*print_morelimits();*/
+	test_uint32_encode();
 	test_FITS_INTO_SIGNED_INT();
 	test_PROMOTES_TO_SIGNED_TYPE();
 	test_overflow();

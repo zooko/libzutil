@@ -31,12 +31,12 @@ unsigned long UINT32_DECODE(const zbyte* const bs)
 void uint32_encode(unsigned int u, zbyte* const bs)
 {
 	runtime_assert(u <= Z_UINT32_MAX, "Cannot encode a number this into 32 bits.");
-	bs[3] = u % Z_UINT8_MAX;
-	u /= Z_UINT8_MAX;
-	bs[2] = u % Z_UINT8_MAX;
-	u /= Z_UINT8_MAX;
-	bs[1] = u % Z_UINT8_MAX;
-	u /= Z_UINT8_MAX;
+	bs[3] = u % (1U << 8);
+	u /= (1U << 8);
+	bs[2] = u % (1U << 8);
+	u /= (1U << 8);
+	bs[1] = u % (1U << 8);
+	u /= (1U << 8);
 	bs[0] = u;
 }
 

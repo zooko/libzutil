@@ -18,12 +18,12 @@
 #include <stddef.h>
 #include <limits.h>
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.9 2004/03/12 16:49:05 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.10 2004/03/20 00:28:20 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;
-static int const morelimits_vermicro = 1;
-static char const* const morelimits_vernum = "0.9.1";
+static int const morelimits_vermicro = 2;
+static char const* const morelimits_vernum = "0.9.2";
 
 /*
  * The following are not defined in the standard C library's "limits.h", but are sometimes defined in other headers.
@@ -47,6 +47,13 @@ static char const* const morelimits_vernum = "0.9.1";
 #ifndef TIME_T_MIN
 #define TIME_T_MIN Z_TIME_T_MIN
 #endif
+
+/**
+ * The following is useful only if you are storing numbers in storage space of
+ * type void*, and you want to be sure your numbers aren't too big.  ANSI C does
+ * not guarantee that you can do this.
+ */
+#define Z_MAX_VOIDP Z_MAX_UNSIGNED_BITS(sizeof(void*) * CHAR_BIT)
 
 /*
  * The C standard does not offer integers of an exact width, so if you rely on 

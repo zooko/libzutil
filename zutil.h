@@ -19,12 +19,18 @@
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.16 2004/03/12 16:49:05 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.17 2004/03/20 00:28:20 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 11;
-static char const* const zutil_vernum = "0.9.11";
+static int const zutil_vermicro = 14;
+static char const* const zutil_vernum = "0.9.14";
+
+#ifndef __cplusplus
+typedef int bool;
+#define true ((bool)1)
+#define false ((bool)0)
+#endif
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 
