@@ -11,22 +11,24 @@
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.1 2002/02/08 17:30:54 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.2 2002/02/10 16:03:38 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 1;
 static int const morelimits_vermicro = 0;
 static char const* const morelimits_vernum = "0.1.0";
 
-#define Z_MAX_UNSIGNED(typ) ((typ)(~(typ)0))
+#define Z_MAX_UNSIGNED(typ) ((typ)(~((typ)0)))
 #define Z_MIN_UNSIGNED(typ) ((typ)0)
 
-/* This doesn't work on a "long long" of course. */
-#define Z_MAX_SIGNED(typ) ((~((typ)0UL))>>1)
-#define Z_MIN_SIGNED(typ) ((typ)(-(Z_MAX_SIGNED(typ)-1)))
+/* The following `Z_MAX_SIGNED' and `Z_MIN_SIGNED' macros will work on any C implementation where the maximum value of a signed type `typ' is equal to 2^(sizeof(typ)*CHAR_BIT) - 1, and the minimum value of a signed is equal to the -1*(maximum value+1). */
+#define Z_SIGNED_HIGH_BIT(typ) ((typ)((typ)1<<((sizeof(typ)*CHAR_BIT)-2)))
+#define Z_SIGNED_LOW_BITS(typ) ((typ)((Z_SIGNED_HIGH_BIT(typ))-1))
+#define Z_MAX_SIGNED(typ) ((typ)(Z_SIGNED_HIGH_BIT(typ) + Z_SIGNED_LOW_BITS(typ)))
+#define Z_MIN_SIGNED(typ) ((typ)((-Z_MAX_SIGNED(typ))-1))
 
-#define Z_MAX(typ) ((typ)(MAX_FLEXIBLE(Z_MAX_UNSIGNED(typ), Z_MAX_SIGNED(typ))))
-#define Z_MIN(typ) ((typ)(MIN_FLEXIBLE(Z_MIN_UNSIGNED(typ), Z_MIN_SIGNED(typ))))
+#define Z_MAX(typ) ((Z_MAX_SIGNED(typ)>Z_MAX_UNSIGNED(typ))?Z_MAX_SIGNED(typ):Z_MAX_UNSIGNED(typ))
+#define Z_MIN(typ) ((Z_MIN_SIGNED(typ)<Z_MIN_UNSIGNED(typ))?Z_MIN_SIGNED(typ):Z_MIN_UNSIGNED(typ))
 
 /*
  * The following are not defined in the standard C library's "limits.h", but they should be!
@@ -44,6 +46,16 @@ static char const* const morelimits_vernum = "0.1.0";
 #define MIN_UINT Z_MIN(unsigned int)
 #define MIN_USHORT Z_MIN(unsigned short)
 #define MIN_UCHAR Z_MIN(unsigned char)
+
+/*
+ * The following is not standard C.  If your compiler supports LONG LONG, then please patch this to somehow detect that during preprocessing and send me the patch.
+ */
+#ifdef __GNUC__
+#define MAX_LONGLONG Z_MAX(long long)
+#define MIN_LONGLONG Z_MIN(long long)
+#define MAX_ULONGLONG Z_MAX(unsigned long long)
+#define MIN_ULONGLONG Z_MIN(unsigned long long)
+#endif
 
 /*
  * All of the following are defined in the standard C library's "limits.h" header, under different names.  They are included here just because I can.  Maybe someday you'll be on a machine with an incorrect or incomplete "limits.h" and you'll thank me.

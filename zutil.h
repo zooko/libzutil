@@ -7,40 +7,25 @@
 #ifndef __INCL_zutil_h
 #define __INCL_zutil_h
 
-/* define LITTLE_ENDIAN if your machine stores integers with the most significant byte in the rightmost (highest-addressed) byte of the word */
-/* #define LITTLE_ENDIAN */
-
 #include "exhaust.h"
 #include "minmax.h"
 #include "morelimits.h"
 
+#include <limits.h>
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.2 2002/02/09 13:50:39 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.3 2002/02/10 16:03:38 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 2;
 static int const zutil_vermicro = 0;
 static char const* const zutil_vernum = "0.2.0";
 
-typedef unsigned char zbyte;
-
 /**
- * Reads the data from the first four bytes of `bs' and creates an unsigned long, according to big-
- * endian encoding of an unsigned 32-bit integer.  Note that this works even if your unsigned longs 
- * are bigger than 32 bits.
- */
-unsigned long natlong(const void*const vs);
-unsigned long NATLONG(const void*const vs);
-#ifdef NDEBUG
-#ifdef LITTLE_ENDIAN
-unsigned long natlong(const void*const vs);
-#define NATLONG(vs) (((unsigned long)(((zbyte*)(vs))[3])) | ((unsigned long)(((zbyte*)(vs))[2])) << 8 | ((unsigned long)(((zbyte*)(vs))[1])) << 16 | ((unsigned long)(((zbyte*)(vs))[0])) << 24)
-#else /* #ifdef LITTLE_ENDIAN */
-#define natlong(vs) (*((const unsigned long*const)(vs)))
-#define NATLONG(vs) (*((const unsigned long*const)(vs)))
-#endif /* #ifdef LITTLE_ENDIAN */
-#endif /* #ifdef NDEBUG */
+ * This is guaranteed by ANSI C to be at least large enough to store at least 8 bits.  It is allowed
+ *  to be larger.
+*/
+typedef unsigned char zbyte;
 
 /*
 `divceil(x, y)' is better than `(x+(y-1))/y' because the latter can overflow in the addition.   

@@ -7,7 +7,7 @@ RANLIB=ranlib
 AR=ar
 
 # CFLAGS=-ansi -pedantic -std=c89 -Wall -O0
-CFLAGS=-Wall -O0
+CFLAGS=-Wall -O0 -Wsigned-compare
 
 # SRCS=$(wildcard *.c)
 SRCS=zutil.c exhaust.c

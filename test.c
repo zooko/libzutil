@@ -11,6 +11,21 @@
 #include "zutil.h"
 
 #include <assert.h>
+
+int test_GCC_doc_suggestion()
+{
+#define max(a,b) \
+       ({typedef _ta = (a), _tb = (b);  \
+         _ta _a = (a); _tb _b = (b);     \
+         _a > _b ? _a : _b; })
+
+	if (max(-1, 2UL) > 0) {
+		printf("That's a strange definition of \"safe\".\n");
+		return -1;
+	}
+	return 0;
+}
+
 /*
 int test_minmax_flexible_crazybadargs()
 {
@@ -48,7 +63,6 @@ int test_minmax_strict_badargs()
 }
 */
 
-/*
 int test_minmax_strict()
 {
 	int x = 2;
@@ -91,8 +105,8 @@ int test_minmax_strict()
 	}
 	return 0;
 }
-*/
 
+/*
 int test_minmax_unsafe()
 {
 	int a;
@@ -105,6 +119,7 @@ int test_minmax_unsafe()
 	}
 	return 0;
 }
+*/
 
 int test_gcc_ifexpr()
 {
@@ -120,6 +135,7 @@ int test_gcc_ifexpr()
 	return 0;
 }
 
+/*
 int test_minmax_flexible()
 {
 	int a, res, x;
@@ -190,17 +206,7 @@ int test_minmax_flexible()
 	}
 	return 0;
 }
-
-int test_natlong()
-{
-	const zbyte buf[4] = { 0, 0, 0, 3 };
-	unsigned long x = natlong(buf);
-	unsigned long y = NATLONG(buf);
-	printf("%u, %lu, %lu\n", buf[3], x, natlong(buf));
-	assert (x == y);
-	assert (x == 3);
-	return 0;
-}
+*/
 
 int test_exhausterr()
 {
@@ -208,12 +214,13 @@ int test_exhausterr()
 	return -1;
 }
 
-#if 0
 int test_morelimits()
 {
 	printf("(char)0: %d\n", (char)0);
-	printf("MAX_UNSIGNED(char): %d\n", Z_MAX_UNSIGNED(char));
-	printf("MAX_SIGNED(char): %d\n", Z_MAX_UNSIGNED(char));
+	printf("~((char)0): %d\n", ~((char)0));
+	printf("(~((char)0))>>1: %d\n", (~((char)0))>>1);
+	printf("MAX_UNSIGNED(unsigned char): %u\n", Z_MAX_UNSIGNED(unsigned char));
+	printf("MAX_SIGNED(char): %d\n", Z_MAX_SIGNED(char));
 
 	printf("MAX_UCHAR: %u\n", MAX_UCHAR);
 	printf("UCHAR_MAX: %u\n", UCHAR_MAX);
@@ -252,24 +259,27 @@ int test_morelimits()
 	printf("MIN_LONG: %ld\n", MIN_LONG);
 	printf("LONG_MIN: %ld\n", LONG_MIN);
 
+#ifdef __GNUC__
+	printf("\n");
+	printf("MAX_LONGLONG: %lld\n", MAX_LONGLONG);
+	printf("MIN_LONGLONG: %lld\n", MIN_LONGLONG);
+	printf("MAX_ULONGLONG: %llu\n", MAX_ULONGLONG);
+	printf("MIN_ULONGLONG: %llu\n", MIN_ULONGLONG);
+#endif /* #ifdef __GNUC__ */
+
 	assert (MAX_TIME_T > MIN_TIME_T);
 
 	return 0;
 }
-#endif
 
 int main(int argv, char**argc)
 {
+	test_GCC_doc_suggestion();
+	test_morelimits();
 	test_gcc_ifexpr();
-	test_minmax_flexible();
-
-/*	test_minmax_unsafe();*/
-
 /*	test_minmax_flexible_crazybadargs();*/
-  /*		test_minmax_strict();*/
-	/*test_minmax_strict_badargs();*/
-	/*test_natlong();*/
-	/*test_morelimits();*/
+	test_minmax_strict();
+/*	test_minmax_strict_badargs();*/
 	/*test_exhausterr();*/
 	return 0;
 }
