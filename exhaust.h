@@ -2,13 +2,18 @@
  * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the simple, permissive free software, open 
- * source license.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction (including the
+ * rights to use, modify, distribute, sublicense, and/or sell copies) provided
+ * that the above copyright notice and this permission notice is included in
+ * all copies or substantial portions of this software. THIS SOFTWARE IS
+ * PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
  */
+
 #ifndef __INCL_exhaust_h
 #define __INCL_exhaust_h
 
-static char const* const exhaust_h_cvsid = "$Id: exhaust.h,v 1.3 2004/02/08 16:22:12 zooko Exp $";
+static char const* const exhaust_h_cvsid = "$Id: exhaust.h,v 1.4 2004/03/12 16:49:05 zooko Exp $";
 
 static int const exhaust_vermaj = 0;
 static int const exhaust_vermin = 9;
@@ -26,16 +31,3 @@ void _z_printerr_and_exit(const char*const msg, const char*const filename, unsig
 #define CHECKMALLOC(x) CHECKMALLOCEXIT(x)
 
 #endif /* #ifndef __INCL_exhaust_h */
-
-/**
- * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software to deal in this software without restriction, including
- * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies of this software, and to permit persons to whom this software is 
- * furnished to do so, provided that the above copyright notice and this 
- * permission notice is included in all copies or substantial portions of this 
- * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED.
- */

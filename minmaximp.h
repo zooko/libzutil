@@ -2,9 +2,14 @@
  * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the simple, permissive free software, open 
- * source license.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction (including the
+ * rights to use, modify, distribute, sublicense, and/or sell copies) provided
+ * that the above copyright notice and this permission notice is included in
+ * all copies or substantial portions of this software. THIS SOFTWARE IS
+ * PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
  */
+
 #ifndef __INCL_minmaximp_h
 #define __INCL_minmaximp_h
 
@@ -43,11 +48,11 @@
  */
 #define _PROMOTE_NONLL_TO_LLS(x) \
     ((sizeof(x) < sizeof(long long)) ? \
-        ((signed long long)(x)) : \
+        ((long long)(x)) : \
         (x))
 
 #define _MAX_UNSAFE_LLS(x, y) \
-    ((((signed long long)(x)) > ((signed long long)(y))) ? \
+    ((((long long)(x)) > ((long long)(y))) ? \
         _PROMOTE_NONLL_TO_LLS(x) : \
         _PROMOTE_NONLL_TO_LLS(y))
 
@@ -69,11 +74,11 @@
                 _MAX_UNSAFE_LLU(x, y)) : \
             _MAX_UNSAFE_LLU(x, y)))
 
-#define _RAISE_EXCEPTION ((signed long long)(1/0)) /* If you are wondering why you just got a divide-by-zero exception, it is because this code was compiled in debug mode (the ZMINMAXDEBUG flag was set) and there is a MIN macro being used where it cannot give the right answer, either because the answer is negative and the type of the expression is unsigned, or because the answer is greater than LLONG_MAX and the type of the expression is signed long long.  Please see minmax.h for information on how to use these MIN macros safely. */
+#define _RAISE_EXCEPTION ((long long)(1/0)) /* If you are wondering why you just got a divide-by-zero exception, it is because this code was compiled in debug mode (the ZMINMAXDEBUG flag was set) and there is a MIN macro being used where it cannot give the right answer, either because the answer is negative and the type of the expression is unsigned, or because the answer is greater than LLONG_MAX and the type of the expression is long long.  Please see minmax.h for information on how to use these MIN macros safely. */
 
 /**
  * The MIN_LLS macros always correctly choose the smallest one of the two 
- * operands, but the result is cast to type signed long long.  Therefore if the 
+ * operands, but the result is cast to type long long.  Therefore if the 
  * winning operand (the smallest operand) is too large to fit into a signed long 
  * long then the result is implementation-dependent.  I suspect that on most 
  * platforms you can cast the result back to unsigned long long and you'll have 
@@ -89,9 +94,9 @@
 #define _MIN_LLS_FLEX(x, y) (((x) < 0&&(y) >= 0)?((long long)(x)):(((y) < 0&&(x) >= 0)?((long long)(y)):(((x) < (y))?((long long)(x)):((long long)(y)))))
 /* _MIN_LLS_CHECK is just for pedantic and verification purposes -- we use _FASTER_MIN_LLS_CHECK in practice. */
 #define _MIN_LLS_UNSAFE(x, y) \
-    ((((signed long long)(x)) < ((signed long long)(y))) ? \
-        ((signed long long)(x)) : \
-        ((signed long long)(y)))
+    ((((long long)(x)) < ((long long)(y))) ? \
+        ((long long)(x)) : \
+        ((long long)(y)))
 #define _MIN_LLS_CHECK(x, y) \
     ((OPERAND_IS_LLU(x) && OPERAND_IS_LLU(y) && OPERAND_EXCEEDS_LLONG_MAX(x) && OPERAND_EXCEEDS_LLONG_MAX(y)) ? \
         _RAISE_EXCEPTION : \
@@ -102,35 +107,35 @@
             (OPERAND_EXCEEDS_LLONG_MAX(x) ? \
                 (OPERAND_EXCEEDS_LLONG_MAX(y) ? \
                     _RAISE_EXCEPTION : \
-                    ((signed long long)(y))) : \
+                    ((long long)(y))) : \
                 (OPERAND_EXCEEDS_LLONG_MAX(y) ? \
-                    ((signed long long)(x)) : \
+                    ((long long)(x)) : \
                     _MIN_LLS_UNSAFE(x, y))) : \
             (OPERAND_EXCEEDS_LLONG_MAX(x) ? \
-                ((signed long long)(y)) : \
+                ((long long)(y)) : \
                 _MIN_LLS_UNSAFE(x, y))) : \
         (OPERAND_IS_LLU(y) ? \
             (OPERAND_EXCEEDS_LLONG_MAX(y) ? \
-                ((signed long long)(x)) : \
+                ((long long)(x)) : \
                 _MIN_LLS_UNSAFE(x, y)) : \
             _MIN_LLS_UNSAFE(x, y)))
 #define _FASTER_MIN_LLS_FLEX(x, y) \
     (OPERAND_IS_LLU(x) ? \
         (OPERAND_IS_LLU(y) ? \
             ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
-                ((signed long long)(x)) : \
-                ((signed long long)(y))) : \
+                ((long long)(x)) : \
+                ((long long)(y))) : \
             (((y) < 0) ? \
-                ((signed long long)(y)) : \
+                ((long long)(y)) : \
                 ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
-                    ((signed long long)(x)) : \
-                    ((signed long long)(y))))) : \
+                    ((long long)(x)) : \
+                    ((long long)(y))))) : \
         (OPERAND_IS_LLU(y) ? \
             (((x) < 0) ? \
-                ((signed long long)(x)) : \
+                ((long long)(x)) : \
                 ((((unsigned long long)(x)) < ((unsigned long long)(y))) ? \
-                    ((signed long long)(x)) : \
-                    ((signed long long)(y)))) : \
+                    ((long long)(x)) : \
+                    ((long long)(y)))) : \
             _MIN_LLS_UNSAFE(x, y)))
 
 /**
@@ -180,6 +185,10 @@
                 ((unsigned long long)(x)) : \
                 _MIN_LLU_UNSAFE(x, y))))
 
+/* undef'ing MIN and MAX isn't very friendly, but really our macros are safer in every case, and just as fast in most cases. */
+#undef MIN
+#undef MAX
+
 #ifdef ZMINMAXDEBUG
 #define MIN_LLS _FASTER_MIN_LLS_CHECK
 #define MIN_LLU _MIN_CHECK
@@ -192,16 +201,3 @@
 #define MIN MIN_LLS
 
 #endif /* #ifndef __INCL_minmaximp_h */
-
-/**
- * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software to deal in this software without restriction, including
- * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies of this software, and to permit persons to whom this software is 
- * furnished to do so, provided that the above copyright notice and this 
- * permission notice is included in all copies or substantial portions of this 
- * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED.
- */

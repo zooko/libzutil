@@ -2,9 +2,14 @@
  * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the simple, permissive free software, open 
- * source license.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction (including the
+ * rights to use, modify, distribute, sublicense, and/or sell copies) provided
+ * that the above copyright notice and this permission notice is included in
+ * all copies or substantial portions of this software. THIS SOFTWARE IS
+ * PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
  */
+
 #ifndef __INCL_zutil_h
 #define __INCL_zutil_h
 
@@ -14,12 +19,12 @@
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.15 2004/02/24 02:07:23 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.16 2004/03/12 16:49:05 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 10;
-static char const* const zutil_vernum = "0.9.10";
+static int const zutil_vermicro = 11;
+static char const* const zutil_vernum = "0.9.11";
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 
@@ -130,15 +135,3 @@ int ADD_WOULD_OVERFLOW_ULLONG(unsigned long long x, unsigned long long y);
 #include "zutilimp.h" /* implementation stuff that you needn't see in order to use the library */
 
 #endif /* #ifndef __INCL_zutil_h */
-
-/**
- * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software to deal in this software without restriction, including 
- * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies, provided that the above copyright notice and this permission 
- * notice is included in all copies or substantial portions of this softare. 
- * THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED.
- */

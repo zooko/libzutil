@@ -2,9 +2,14 @@
  * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the simple, permissive free software, open 
- * source license.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction (including the
+ * rights to use, modify, distribute, sublicense, and/or sell copies) provided
+ * that the above copyright notice and this permission notice is included in
+ * all copies or substantial portions of this software. THIS SOFTWARE IS
+ * PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
  */
+
 #ifndef __INCL_morelimits_h
 #define __INCL_morelimits_h
 
@@ -13,32 +18,46 @@
 #include <stddef.h>
 #include <limits.h>
 
-#include "zutil.h"
-
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.8 2004/02/08 16:22:12 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.9 2004/03/12 16:49:05 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;
-static int const morelimits_vermicro = 0;
-static char const* const morelimits_vernum = "0.9.0";
+static int const morelimits_vermicro = 1;
+static char const* const morelimits_vernum = "0.9.1";
 
 /*
- * The following are not defined in the standard C library's "limits.h", but they should be!
+ * The following are not defined in the standard C library's "limits.h", but are sometimes defined in other headers.
  */
-#define SIZE_T_MAX Z_MAX(size_t)
-#define SIZE_T_MIN Z_MIN(size_t)
+#define Z_SIZE_T_MAX Z_MAX(size_t)
+#define Z_SIZE_T_MIN Z_MIN(size_t)
 
-#define TIME_T_MAX Z_MAX(time_t)
-#define TIME_T_MIN Z_MIN(time_t)
+#ifndef SIZE_T_MAX
+#define SIZE_T_MAX Z_SIZE_T_MAX
+#endif
+#ifndef SIZE_T_MIN
+#define SIZE_T_MIN Z_SIZE_T_MIN
+#endif
+
+#define Z_TIME_T_MAX Z_MAX(time_t)
+#define Z_TIME_T_MIN Z_MIN(time_t)
+
+#ifndef TIME_T_MAX 
+#define TIME_T_MAX Z_TIME_T_MAX
+#endif
+#ifndef TIME_T_MIN
+#define TIME_T_MIN Z_TIME_T_MIN
+#endif
 
 /*
  * The C standard does not offer integers of an exact width, so if you rely on 
  * an integer to be of a specific width your code may not port to all C 
- * platforms.  The following are intended to be used only for reading and 
- * writing integers of fixed width from streams of data.
+ * platforms.  The following are intended only for reading and writing integers
+ * of fixed width from streams of data.
  */
-#define Z_UINT8_MAX Z_MAX_UNSIGNED_BITS(8)
-#define Z_UINT32_MAX Z_MAX_UNSIGNED_BITS(32)
+#define Z_UINT8_MAX ((unsigned short)Z_MAX_UNSIGNED_BITS(8))
+#define Z_UINT16_MAX ((unsigned short)Z_MAX_UNSIGNED_BITS(16))
+#define Z_UINT32_MAX ((unsigned long)Z_MAX_UNSIGNED_BITS(32))
+#define Z_UINT64_MAX ((unsigned long long)Z_MAX_UNSIGNED_BITS(64))
 
 /*
  * The following are not defined in the standard C library's "limits.h", 
@@ -150,16 +169,3 @@ static char const* const morelimits_vernum = "0.9.0";
 #endif
 
 #endif /* #ifndef __INCL_morelimits_h */
-
-/**
- * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software to deal in this software without restriction, including
- * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies of this software, and to permit persons to whom this software is 
- * furnished to do so, provided that the above copyright notice and this 
- * permission notice is included in all copies or substantial portions of this 
- * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED.
- */

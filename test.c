@@ -2,9 +2,14 @@
  * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the simple, permissive free software, open 
- * source license.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction (including the
+ * rights to use, modify, distribute, sublicense, and/or sell copies) provided
+ * that the above copyright notice and this permission notice is included in
+ * all copies or substantial portions of this software. THIS SOFTWARE IS
+ * PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
  */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
@@ -381,7 +386,7 @@ int test_minmax_fast()
 {
 	unsigned int unsignedthree = 3;
 	unsigned char unsignedcharthree = 3;
-	signed long long signedllthree = 3;
+	long long signedllthree = 3;
 	int negone = -1;
 	if (_MIN_UNSAFE(unsignedthree, negone) != negone) {
 		/* printf("just as we expected, using _MIN_UNSAFE on one negative operand and one unsigned int operand results in the wrong answer; _MIN_UNSAFE(%uU, %d) != %d\n", unsignedthree, negone, negone); */
@@ -394,9 +399,9 @@ int test_minmax_fast()
 		printf("???_MAX_UNSAFE() should not have been able to correctly answer this question featuring a negative operand and an unsigned int operand.\n");
 	}
 	if (_MIN_UNSAFE(signedllthree, negone) != negone) {
-		printf("???_MIN_UNSAFE() should have been able to correctly answer this question featuring a negative operand and a signed long long operand.  _MIN_UNSAFE(%lldLL, %d) != %d\n\n", signedllthree, negone, negone);
+		printf("???_MIN_UNSAFE() should have been able to correctly answer this question featuring a negative operand and a long long operand.  _MIN_UNSAFE(%lldLL, %d) != %d\n\n", signedllthree, negone, negone);
 	} else {
-		/* printf("just as we expected, using _MIN_UNSAFE on one negative operand and one signed long long operand results in the right answer\n"); */
+		/* printf("just as we expected, using _MIN_UNSAFE on one negative operand and one long long operand results in the right answer\n"); */
 	}
 	if (_MIN_UNSAFE(unsignedcharthree, negone) != negone) {
 		printf("???_MIN_UNSAFE() should have been able to correctly answer this question featuring a negative operand and an unsigned char operand. _MIN_UNSAFE(%uc, %d) != %d\n\n", unsignedcharthree, negone, negone);
@@ -407,7 +412,7 @@ int test_minmax_fast()
 }
 
 int _test_MIN_smallerint_biggeruint(int i, unsigned u) {
-	if (MIN(i, u) >= ((signed long long)(u))) {
+	if (MIN(i, u) >= ((long long)(u))) {
 		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL >= u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
 	if (MIN(i, u) > i) {
@@ -1133,6 +1138,20 @@ void test_exhausterr()
 
 int test_morelimits()
 {
+#if 0 /* alas, the Z_foo_MAX macros can't be used in #if expressions.  This makes them unsuitable for use as LONG_MAX values, according to xxx draco */
+#if Z_LONG_MAX == LONG_MAX
+#error error in morelimits macro
+#endif
+#if Z_ULONG_MAX == ULONG_MAX
+#error error in morelimits macro
+#endif
+#if Z_LLONG_MAX == LLONG_MAX
+#error error in morelimits macro
+#endif
+#if Z_ULLONG_MAX == ULLONG_MAX
+#error error in morelimits macro
+#endif
+#endif
 	assert (TIME_T_MAX > TIME_T_MIN);
 	assert (SIZE_T_MAX > SIZE_T_MIN);
 
@@ -1153,15 +1172,39 @@ int test_morelimits()
 	assert (Z_CHAR_MIN == CHAR_MIN);
 	assert (Z_SCHAR_MAX == SCHAR_MAX);
 	assert (Z_SCHAR_MIN == SCHAR_MIN);
+
+	assert (Z_UINT8_MAX <= UCHAR_MAX);
+	assert (Z_UINT8_MAX > 0);
+	assert (Z_UINT8_MAX < USHRT_MAX);
+
+	assert (Z_UINT16_MAX > 0);
+	assert (Z_UINT16_MAX <= USHRT_MAX);
+
+	assert (Z_UINT32_MAX <= Z_ULONG_MAX);
+	assert (Z_UINT32_MAX <= Z_ULONG_MAX);
+	assert (Z_UINT32_MAX > 0);
+	assert (Z_UINT32_MAX == ((1LLU << 32) - 1));
+
+	assert (Z_UINT64_MAX >= 0);
+	assert (Z_UINT64_MAX == ((1LLU << 63) + ((1LLU << 63) - 1)));
+
 	return 0;
 }
 
 void print_morelimits() {
 	printf("Z_MAX_UNSIGNED(unsigned char): %40u\n", Z_MAX_UNSIGNED(unsigned char));
 	printf("Z_MAX_SIGNED(char):            %40d\n", Z_MAX_SIGNED(char));
+	printf("\n");
+	printf("Z_SIZE_T_MAX:                  %40u\n", Z_SIZE_T_MAX);
 	printf("SIZE_T_MAX:                    %40u\n", SIZE_T_MAX);
+	printf("\n");
+	printf("Z_SIZE_T_MIN:                  %40u\n", Z_SIZE_T_MIN);
 	printf("SIZE_T_MIN:                    %40u\n", SIZE_T_MIN);
+	printf("\n");
+	printf("Z_TIME_T_MAX:                  %40ld\n", Z_TIME_T_MAX);
 	printf("TIME_T_MAX:                    %40ld\n", TIME_T_MAX);
+	printf("\n");
+	printf("Z_TIME_T_MIN:                  %40ld\n", Z_TIME_T_MIN);
 	printf("TIME_T_MIN:                    %40ld\n", TIME_T_MIN);
 	printf("\n");
 	printf("UCHAR_MAX:                     %40u\n", UCHAR_MAX);
@@ -1214,20 +1257,15 @@ void print_morelimits() {
 	printf("\n");
 	printf("LLONG_MIN:                     %40lld\n", LLONG_MIN);
 	printf("Z_LLONG_MIN:                   %40lld\n", Z_LLONG_MIN);
-}
-
-int test_uint32_code()
-{
-	unsigned int res;
-	zbyte bs[4];
-	uint32_encode(42, bs);
-	res = uint32_decode(bs);
-	assert(res == 42);
-	return 0;
+	printf("\n");
+	printf("Z_UINT8_MAX:                   %40u\n", Z_UINT8_MAX);
+	printf("Z_UINT16_MAX:                  %40u\n", Z_UINT16_MAX);
+	printf("Z_UINT32_MAX:                  %40lu\n", Z_UINT32_MAX);
+	printf("Z_UINT64_MAX:                  %40llu\n", Z_UINT64_MAX);
 }
 
 int test() {
-	/*print_morelimits();*/
+	print_morelimits();
 	test_FITS_INTO_SIGNED_INT();
 	test_PROMOTES_TO_SIGNED_TYPE();
 	test_overflow();
@@ -1237,7 +1275,6 @@ int test() {
 	test_MAX();
 	test_minmax_fast();
 	/*test_exhausterr();*/
-	test_uint32_code();
 	return 0;
 }
 
@@ -1253,15 +1290,3 @@ int main(int argv, char**argc) {
 	return test();
 }
 
-/**
- * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software to deal in this software without restriction, including
- * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies of this software, and to permit persons to whom this software is 
- * furnished to do so, provided that the above copyright notice and this 
- * permission notice is included in all copies or substantial portions of this 
- * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED.
- */

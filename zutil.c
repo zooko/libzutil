@@ -2,9 +2,14 @@
  * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the simple, permissive free software, open 
- * source license.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction (including the
+ * rights to use, modify, distribute, sublicense, and/or sell copies) provided
+ * that the above copyright notice and this permission notice is included in
+ * all copies or substantial portions of this software. THIS SOFTWARE IS
+ * PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
  */
+
 #include "zutil.h"
 
 #include "moreassert.h"
@@ -148,12 +153,3 @@ int add_would_overflow_longlong(long long x, long long y) {
 int ADD_WOULD_OVERFLOW_ULLONG(unsigned long long x, unsigned long long y) {
 	return MACRO_ADD_WOULD_OVERFLOW_ULLONG(x, y);
 }
-
-/**
- * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software to deal in this software without restriction, including 
- * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies.
- */
