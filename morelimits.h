@@ -1,8 +1,9 @@
 /**
- * copyright 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
+ * copyright 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * mailto:zooko@zooko.com
  *
- * See the end of this file for the free software, open source license (BSD-style).
+ * See the end of this file for the simple, permissive free software, open 
+ * source license.
  */
 #ifndef __INCL_morelimits_h
 #define __INCL_morelimits_h
@@ -14,7 +15,7 @@
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.7 2004/02/06 17:46:13 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.8 2004/02/08 16:22:12 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;
@@ -151,22 +152,14 @@ static char const* const morelimits_vernum = "0.9.0";
 #endif /* #ifndef __INCL_morelimits_h */
 
 /**
- * Copyright (c) 2002, 2003 Bryce "Zooko" Wilcox-O'Hearn
+ * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software to deal in this software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of this software, and to permit
- * persons to whom this software is furnished to do so, subject to the following
- * conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of this software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * without limitation the rights to use, modify, distribute, sublicense, and/or 
+ * sell copies of this software, and to permit persons to whom this software is 
+ * furnished to do so, provided that the above copyright notice and this 
+ * permission notice is included in all copies or substantial portions of this 
+ * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS OR IMPLIED.
  */
