@@ -1,5 +1,3 @@
-#undef NDEBUG
-
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
@@ -123,6 +121,32 @@ int test_CHAR_FITS_INTO_SIGNED_INT()
 	return 1;
 }
 
+int test_CHAR_PROMOTES_TO_SIGNED_TYPE()
+{
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(signed char));
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(char));
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(unsigned char));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((char)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned char)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((char)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned char)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((char)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned char)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((char)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned char)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)CHAR_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((char)CHAR_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned char)UCHAR_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)CHAR_MIN));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((char)CHAR_MIN));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned char)UCHAR_MIN));
+	return 1;
+}
+
 int test_SIGNED_NONLONG_FITS_INTO_SIGNED_INT()
 {
 	assert (TYPE_FITS_INTO_SIGNED_INT(signed char));
@@ -149,6 +173,32 @@ int test_SIGNED_NONLONG_FITS_INTO_SIGNED_INT()
 	return 1;
 }
 
+int test_SIGNED_NONLONG_PROMOTES_TO_SIGNED_TYPE()
+{
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(signed char));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)CHAR_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed char)CHAR_MIN));
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(signed short));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed short)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed short)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed short)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed short)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed short)SHRT_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed short)SHRT_MIN));
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(signed int));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed int)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed int)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed int)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed int)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed int)INT_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((signed int)INT_MIN));
+	return 1;
+}
+
 int test_UNSIGNED_INT_NOT_FITS_INTO_SIGNED_INT()
 {
 	assert (!TYPE_FITS_INTO_SIGNED_INT(unsigned int));
@@ -158,6 +208,18 @@ int test_UNSIGNED_INT_NOT_FITS_INTO_SIGNED_INT()
 	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)2));
 	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)UINT_MAX));
 	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned int)UINT_MIN));
+	return 1;
+}
+
+int test_UNSIGNED_INT_NOT_PROMOTES_TO_SIGNED_TYPE()
+{
+	assert (!TYPE_PROMOTES_TO_SIGNED_TYPE(unsigned int));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned int)0));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned int)-1));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned int)1));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned int)2));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned int)UINT_MAX));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned int)UINT_MIN));
 	return 1;
 }
 
@@ -173,49 +235,71 @@ int test_UNSIGNED_LONG_NOT_FITS_INTO_SIGNED_INT()
 	return 1;
 }
 
-int test_OPERAND_IS_SIGNED()
+int test_UNSIGNED_LONG_NOT_PROMOTES_TO_SIGNED_TYPE()
 {
-	/*printf("OPERAND_IS_SIGNED(0U): %d\n", OPERAND_IS_SIGNED(0U));*/
-	assert (!OPERAND_IS_SIGNED(0U));
-	/*printf("OPERAND_IS_SIGNED(1U): %d\n", OPERAND_IS_SIGNED(1U));*/
-	assert (!OPERAND_IS_SIGNED(1U));
-	/*printf("OPERAND_IS_SIGNED(2U): %d\n", OPERAND_IS_SIGNED(2U));*/
-	assert (!OPERAND_IS_SIGNED(2U));
-	/*printf("OPERAND_IS_SIGNED(-1U): %d\n", OPERAND_IS_SIGNED(-1U));*/
-	assert (!OPERAND_IS_SIGNED(-1U));
-	/*printf("OPERAND_IS_SIGNED(-2U): %d\n", OPERAND_IS_SIGNED(-2U));*/
-	assert (!OPERAND_IS_SIGNED(-2U));
-	/*printf("OPERAND_IS_SIGNED((unsigned int)0): %d\n", OPERAND_IS_SIGNED((unsigned int)0));*/
-	assert (!OPERAND_IS_SIGNED((unsigned int)0));
-	/*printf("OPERAND_IS_SIGNED((unsigned int)1): %d\n", OPERAND_IS_SIGNED((unsigned int)1));*/
-	assert (!OPERAND_IS_SIGNED((unsigned int)1));
-	/*printf("OPERAND_IS_SIGNED((unsigned int)2): %d\n", OPERAND_IS_SIGNED((unsigned int)2));*/
-	assert (!OPERAND_IS_SIGNED((unsigned int)2));
-	/*printf("OPERAND_IS_SIGNED((unsigned int)-1): %d\n", OPERAND_IS_SIGNED((unsigned int)-1));*/
-	assert (!OPERAND_IS_SIGNED((unsigned int)-1));
-	/*printf("OPERAND_IS_SIGNED((unsigned int)-2): %d\n", OPERAND_IS_SIGNED((unsigned int)-2));*/
-	assert (!OPERAND_IS_SIGNED((unsigned int)-2));
+	assert (!TYPE_PROMOTES_TO_SIGNED_TYPE(unsigned long));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long)0));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long)-1));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long)1));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long)2));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long)ULONG_MAX));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long)ULONG_MIN));
+	return 1;
+}
 
-	/*printf("OPERAND_IS_SIGNED(0): %d\n", OPERAND_IS_SIGNED(0));*/
-	assert (OPERAND_IS_SIGNED(0));
-	/*printf("OPERAND_IS_SIGNED(1): %d\n", OPERAND_IS_SIGNED(1));*/
-	assert (OPERAND_IS_SIGNED(1));
-	/*printf("OPERAND_IS_SIGNED(2): %d\n", OPERAND_IS_SIGNED(2));*/
-	assert (OPERAND_IS_SIGNED(2));
-	/*printf("OPERAND_IS_SIGNED(-1): %d\n", OPERAND_IS_SIGNED(-1));*/
-	assert (OPERAND_IS_SIGNED(-1));
-	/*printf("OPERAND_IS_SIGNED(-2): %d\n", OPERAND_IS_SIGNED(-2));*/
-	assert (OPERAND_IS_SIGNED(-2));
-	/*printf("OPERAND_IS_SIGNED((signed int)0): %d\n", OPERAND_IS_SIGNED((signed int)0));*/
-	assert (OPERAND_IS_SIGNED((signed int)0));
-	/*printf("OPERAND_IS_SIGNED((signed int)1): %d\n", OPERAND_IS_SIGNED((signed int)1));*/
-	assert (OPERAND_IS_SIGNED((signed int)1));
-	/*printf("OPERAND_IS_SIGNED((signed int)2): %d\n", OPERAND_IS_SIGNED((signed int)2));*/
-	assert (OPERAND_IS_SIGNED((signed int)2));
-	/*printf("OPERAND_IS_SIGNED((signed int)-1): %d\n", OPERAND_IS_SIGNED((signed int)-1));*/
-	assert (OPERAND_IS_SIGNED((signed int)-1));
-	/*printf("OPERAND_IS_SIGNED((signed int)-2): %d\n", OPERAND_IS_SIGNED((signed int)-2));*/
-	assert (OPERAND_IS_SIGNED((signed int)-2));
+int test_UNSIGNED_LONGLONG_NOT_FITS_INTO_SIGNED_INT()
+{
+	assert (!TYPE_FITS_INTO_SIGNED_INT(unsigned long long));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)0));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)-1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)2));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)ULONG_MAX));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)ULONG_MIN));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)ULLONG_MAX));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((unsigned long long)ULLONG_MIN));
+	return 1;
+}
+
+int test_UNSIGNED_LONGLONG_NOT_PROMOTES_TO_SIGNED_TYPE()
+{
+	assert (!TYPE_PROMOTES_TO_SIGNED_TYPE(unsigned long long));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)0));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)-1));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)1));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)2));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)ULONG_MAX));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)ULONG_MIN));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)ULLONG_MAX));
+	assert (!OPERAND_PROMOTES_TO_SIGNED_TYPE((unsigned long long)ULLONG_MIN));
+	return 1;
+}
+
+int test_SIGNED_LONGLONG_NOT_FITS_INTO_SIGNED_INT()
+{
+	assert (!TYPE_FITS_INTO_SIGNED_INT(long long));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)0));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)-1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)1));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)2));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)ULONG_MAX));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)ULONG_MIN));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)ULLONG_MAX));
+	assert (!OPERAND_FITS_INTO_SIGNED_INT((long long)ULLONG_MIN));
+	return 1;
+}
+
+int test_SIGNED_LONGLONG_PROMOTES_TO_SIGNED_TYPE()
+{
+	assert (TYPE_PROMOTES_TO_SIGNED_TYPE(long long));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)0));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)-1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)1));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)2));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)ULONG_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)ULONG_MIN));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)ULLONG_MAX));
+	assert (OPERAND_PROMOTES_TO_SIGNED_TYPE((long long)ULLONG_MIN));
 	return 1;
 }
 
@@ -236,26 +320,81 @@ int test_FITS_INTO_SIGNED_INT()
 	if (!test_UNSIGNED_LONG_NOT_FITS_INTO_SIGNED_INT()) {
 		return 0;
 	}
+	
+	if (!test_UNSIGNED_LONGLONG_NOT_FITS_INTO_SIGNED_INT()) {
+		return 0;
+	}
+
+	if (!test_SIGNED_LONGLONG_NOT_FITS_INTO_SIGNED_INT()) {
+		return 0;
+	}
+
+	return 1;
+}
+
+int test_PROMOTES_TO_SIGNED_TYPE()
+{
+	if (!test_CHAR_PROMOTES_TO_SIGNED_TYPE()) {
+		return 0;
+	}
+
+	if (!test_SIGNED_NONLONG_PROMOTES_TO_SIGNED_TYPE()) {
+		return 0;
+	}
+
+	if (!test_UNSIGNED_INT_NOT_PROMOTES_TO_SIGNED_TYPE()) {
+		return 0;
+	}
+
+	if (!test_UNSIGNED_LONG_NOT_PROMOTES_TO_SIGNED_TYPE()) {
+		return 0;
+	}
+	
+	if (!test_UNSIGNED_LONGLONG_NOT_PROMOTES_TO_SIGNED_TYPE()) {
+		return 0;
+	}
+
+	if (!test_SIGNED_LONGLONG_PROMOTES_TO_SIGNED_TYPE()) {
+		return 0;
+	}
 
 	return 1;
 }
 
 /* If this test is commented-in, it will ideally give compile-time errors!
-int test_minmax_flexible_crazybadargs()
+int test_MIN_crazybadargs()
 {
 	char b[10];
 	int z = 1;
-	_MIN_LLS(b, z);
+	MIN(b, z);
 }
 */
 
 int test_minmax_fast()
 {
 	unsigned int unsignedthree = 3;
+	unsigned char unsignedcharthree = 3;
+	signed long long signedllthree = 3;
 	int negone = -1;
-	if (_MIN_FAST(unsignedthree, negone) != -1) {
-		printf("failed test _MIN_FAST(%uU, %d) != %d\n", unsignedthree, negone, -1);
-		return -1;
+	if (_MIN_UNSAFE(unsignedthree, negone) != negone) {
+		/* printf("just as we expected, using _MIN_UNSAFE on one negative operand and one unsigned int operand results in the wrong answer; _MIN_UNSAFE(%uU, %d) != %d\n", unsignedthree, negone, negone); */
+	} else {
+		printf("???_MIN_UNSAFE() should not have been able to correctly answer this question featuring a negative operand and an unsigned int operand.\n");
+	}
+	if (_MAX_UNSAFE(unsignedthree, negone) != unsignedthree) {
+		/* printf("just as we expected, using _MAX_UNSAFE on one negative operand and one unsigned int operand results in the wrong answer; _MAX_UNSAFE(%uU, %d) != %d\n", unsignedthree, negone, unsignedthree); */
+	} else {
+		printf("???_MAX_UNSAFE() should not have been able to correctly answer this question featuring a negative operand and an unsigned int operand.\n");
+	}
+	if (_MIN_UNSAFE(signedllthree, negone) != negone) {
+		printf("???_MIN_UNSAFE() should have been able to correctly answer this question featuring a negative operand and a signed long long operand.  _MIN_UNSAFE(%lldLL, %d) != %d\n\n", signedllthree, negone, negone);
+	} else {
+		/* printf("just as we expected, using _MIN_UNSAFE on one negative operand and one signed long long operand results in the right answer\n"); */
+	}
+	if (_MIN_UNSAFE(unsignedcharthree, negone) != negone) {
+		printf("???_MIN_UNSAFE() should have been able to correctly answer this question featuring a negative operand and an unsigned char operand. _MIN_UNSAFE(%uc, %d) != %d\n\n", unsignedcharthree, negone, negone);
+	} else {
+		/* printf("just as we expected, using _MIN_UNSAFE on one negative operand and one unsigned char operand results in the right answer\n"); */
 	}
 	return 0;
 }
@@ -274,554 +413,662 @@ int test_gcc_ifexpr()
 	return 0;
 }
 
-int _test_MIN_LLS_smallerint_biggeruint(int i, unsigned u) {
-	if (_MIN_LLS(i, u) >= u) {
-		printf("failed test _MIN_LLS(%d, %uU): %lldLL == %lluULL >= u == %uU\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+int _test_MIN_smallerint_biggeruint(int i, unsigned u) {
+	if (MIN(i, u) >= u) {
+		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL >= u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
-	if (_MIN_LLS(i, u) > i) {
-		printf("failed test _MIN_LLS(%d, %uU): %lldLL == %lluULL > i == %d\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
+	if (MIN(i, u) > i) {
+		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL > i == %d\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
-	if (_MIN_LLS(i, u) != i) {
-		printf("failed test _MIN_LLS(%d, %uU): %lldLL == %lluULL != i == %d\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
+	if (MIN(i, u) != i) {
+		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL != i == %d\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_smallerlong_biggerulong(long i, unsigned long u) {
-	if (_MIN_LLS(i, u) >= u) {
-		printf("failed test _MIN_LLS(%ld, %lu): %lldLL == %lluULL >= u == %lu\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+int _test_MAX_smallerint_biggeruint(int i, unsigned u) {
+	if (MAX(i, u) < u) {
+		printf("failed test %d MAX(%d, %uU): %d == %uU < u == %uU == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u, u);
 	}
-	if (_MIN_LLS(i, u) > i) {
-		printf("failed test _MIN_LLS(%ld, %lu): %lldLL == %lluULL > i == %ld\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
-	}
-	if (_MIN_LLS(i, u) != i) {
-		printf("failed test _MIN_LLS(%ld, %lu): %lldLL == %lluULL != i == %ld\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
+	if (MAX(i, u) != u) {
+		printf("failed test %d MAX(%d, %uU): %d == %uU != u == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_biggerint_smalleruint(int i, unsigned u) {
-	if (_MIN_LLS(i, u) >= i) {
-		printf("failed test _MIN_LLS(%d, %uU): %lldLL == %lluULL >= i == %d\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
+int _test_MIN_smallerlong_biggerulong(long i, unsigned long u) {
+	if (MIN(i, u) >= u) {
+		printf("failed test %d MIN(%ld, %lu): %lldLL == %lluULL >= u == %lu\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
-	if (_MIN_LLS(i, u) > u) {
-		printf("failed test _MIN_LLS(%d, %d): %lldLL == %lluULL > u == %uU\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+	if (MIN(i, u) > i) {
+		printf("failed test %d MIN(%ld, %lu): %lldLL == %lluULL > i == %ld\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
-	if (_MIN_LLS(i, u) != u) {
-		printf("failed test _MIN_LLS(%d, %d): %lldLL == %lluULL != u == %uU\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+	if (MIN(i, u) != i) {
+		printf("failed test %d MIN(%ld, %lu): %lldLL == %lluULL != i == %ld\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_biggerullong_smallerint(unsigned long long u, int i) {
-	if (_MIN_LLS(u, i) != i) {
-		printf("failed test _MIN_LLS(%lluULL, %d): %lldLL == %lluULL != i == %uU\n", u, i, _MIN_LLS(u, i), _MIN_LLS(u, i), i);
-		return -1;
+int _test_MAX_smallerlong_biggerulong(long i, unsigned long u) {
+	if (MAX(i, u) <= i) {
+		printf("failed test %d MAX(%ld, %lu): %ldL == %luUL <= i == %ld\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+	}
+	if (MAX(i, u) < u) {
+		printf("failed test %d MAX(%ld, %lu): %ldL == %luUL < u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+	}
+	if (MAX(i, u) != u) {
+		printf("failed test %d MAX(%ld, %lu): %ldL == %luUL != u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_biggerlong_smallerulong(long i, unsigned long u) {
-	if (_MIN_LLS(i, u) >= i) {
-		printf("failed test _MIN_LLS(%ld, %lu): %lldLL == %lluULL >= i == %ld\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
+int _test_MIN_biggerint_smalleruint(int i, unsigned u) {
+	if (MIN(i, u) >= i) {
+		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL >= i == %d\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
-	if (_MIN_LLS(i, u) > u) {
-		printf("failed test _MIN_LLS(%ld, %ld): %lldLL == %lluULL > u == %lu\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+	if (MIN(i, u) > u) {
+		printf("failed test %d MIN(%d, %d): %lldLL == %lluULL > u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
-	if (_MIN_LLS(i, u) != u) {
-		printf("failed test _MIN_LLS(%ld, %ld): %lldLL == %lluULL != u == %lu\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+	if (MIN(i, u) != u) {
+		printf("failed test %d MIN(%d, %d): %lldLL == %lluULL != u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_equalint_equaluint(int i, unsigned u) {
-	if (_MIN_LLS(i, u) != i) {
-		printf("failed test _MIN_LLS(%d, %d): %lldLL == %lluULL != i == %d\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
+int _test_MAX_biggerint_smalleruint(int i, unsigned u) {
+	if (MAX(i, u) <= u) {
+		printf("failed test %d MAX(%d, %uU): %d == %uU <= u == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
-	if (_MIN_LLS(i, u) != u) {
-		printf("failed test _MIN_LLS(%d, %d): %lldLL == %lluULL != u == %uU\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+	if (MAX(i, u) < i) {
+		printf("failed test %d MAX(%d, %d): %d == %uU < i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
-	return 0;
-}
-
-int _test_MIN_LLS_equallong_equalulong(long i, unsigned long u) {
-	if (_MIN_LLS(i, u) != i) {
-		printf("failed test _MIN_LLS(%ld, %ld): %lldLL == %lluULL != i == %ld\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), i);
-		return -1;
-	}
-	if (_MIN_LLS(i, u) != u) {
-		printf("failed test _MIN_LLS(%ld, %ld): %lldLL == %lluULL != u == %lu\n", i, u, _MIN_LLS(i, u), _MIN_LLS(i, u), u);
-		return -1;
+	if (MAX(i, u) != i) {
+		printf("failed test %d MAX(%d, %d): %d == %uU != i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_hugeullong_hugerullong(unsigned long long u1, unsigned long long u2) {
-	if (_MIN_LLS(u1, u2) < 0) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2));
-		return -1;
+int _test_MIN_biggerulong_smallerint(unsigned long u, int i) {
+	if (MIN(u, i) >= u) {
+		printf("failed test %d MIN(%luUL, %d): %ldL == %luUL >= u == %luLU\n", __LINE__, u, i, MIN(u, i), MIN(u, i), u);
 	}
-	if (_MIN_LLS(u1, u2) >= u2) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL >= u2 == %lluULL\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2), u2);
-		return -1;
-	}
-	if (_MIN_LLS(u1, u2) > u1) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL > u1 == %lluULL\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2), u1);
-		return -1;
-	}
-	if (_MIN_LLS(u1, u2) != u1) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL != u1 == %lluULL\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2), u1);
-		return -1;
+	if (MIN(u, i) != i) {
+		printf("failed test %d MIN(%luUL, %d): %ldL == %luUL != i == %d\n", __LINE__, u, i, MIN(u, i), MIN(u, i), i);
 	}
 	return 0;
 }
 
-int _test_MIN_LLS_hugerullong_hugeullong(unsigned long long u1, unsigned long long u2) {
-	if (_MIN_LLS(u1, u2) < 0) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2));
-		return -1;
+int _test_MAX_biggerulong_smallerint(unsigned long u, int i) {
+	if (MAX(u, i) <= i) {
+		printf("failed test %d MAX(%luUL, %d): %ldL == %luUL <= i == %d\n", __LINE__, u, i, MAX(u, i), MAX(u, i), i);
 	}
-	if (_MIN_LLS(u1, u2) >= u1) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL >= u1 == %lluULL\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2), u1);
-		return -1;
-	}
-	if (_MIN_LLS(u1, u2) > u2) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL > u2 == %lluULL\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2), u2);
-		return -1;
-	}
-	if (_MIN_LLS(u1, u2) != u2) {
-		printf("failed test _MIN_LLS(%lluULL, %lluULL): %lldLL == %lluULL != u2 == %lluULL\n", u1, u2, _MIN_LLS(u1, u2), _MIN_LLS(u1, u2), u2);
-		return -1;
+	if (MAX(u, i) != u) {
+		printf("failed test %d MAX(%luUL, %d): %lldLL == %lluULL != u == %luUL\n", __LINE__, u, i, MAX(u, i), MAX(u, i), u);
 	}
 	return 0;
 }
 
-int _test_various_MIN_LLS_smallerint_biggeruint() {
-	_test_MIN_LLS_smallerint_biggeruint(-1, 0);
-	_test_MIN_LLS_smallerint_biggeruint(-1, 1);
-	_test_MIN_LLS_smallerint_biggeruint(-1, UINT_MAX);
-
-	_test_MIN_LLS_smallerint_biggeruint(0, 1);
-	_test_MIN_LLS_smallerint_biggeruint(0, 2);
-	_test_MIN_LLS_smallerint_biggeruint(0, UINT_MAX);
-
-	_test_MIN_LLS_smallerint_biggeruint(1, 2);
-	_test_MIN_LLS_smallerint_biggeruint(1, 3);
-	_test_MIN_LLS_smallerint_biggeruint(1, UINT_MAX);
-
-	_test_MIN_LLS_smallerint_biggeruint(INT_MIN, 0);
-	_test_MIN_LLS_smallerint_biggeruint(INT_MIN, 2);
-	_test_MIN_LLS_smallerint_biggeruint(INT_MIN, UINT_MAX);
-	_test_MIN_LLS_smallerint_biggeruint(INT_MIN, UINT_MIN);
-
-	return 0;
-}
-
-int _test_various_MIN_LLS_smallerlong_biggerulong() {
-	_test_MIN_LLS_smallerlong_biggerulong(-1, 0);
-	_test_MIN_LLS_smallerlong_biggerulong(-1, 1);
-	_test_MIN_LLS_smallerlong_biggerulong(-1, UINT_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(-1, ULONG_MAX);
-
-	_test_MIN_LLS_smallerlong_biggerulong(0, 1);
-	_test_MIN_LLS_smallerlong_biggerulong(0, 2);
-	_test_MIN_LLS_smallerlong_biggerulong(0, UINT_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(0, ULONG_MAX);
-
-	_test_MIN_LLS_smallerlong_biggerulong(1, 2);
-	_test_MIN_LLS_smallerlong_biggerulong(1, 3);
-	_test_MIN_LLS_smallerlong_biggerulong(1, UINT_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(1, ULONG_MAX);
-
-	_test_MIN_LLS_smallerlong_biggerulong(INT_MIN, 0);
-	_test_MIN_LLS_smallerlong_biggerulong(INT_MIN, 2);
-	_test_MIN_LLS_smallerlong_biggerulong(INT_MIN, UINT_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(INT_MIN, ULONG_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(INT_MIN, UINT_MIN);
-	_test_MIN_LLS_smallerlong_biggerulong(INT_MIN, ULONG_MIN);
-
-	_test_MIN_LLS_smallerlong_biggerulong(LONG_MIN, 0);
-	_test_MIN_LLS_smallerlong_biggerulong(LONG_MIN, 2);
-	_test_MIN_LLS_smallerlong_biggerulong(LONG_MIN, UINT_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(LONG_MIN, ULONG_MAX);
-	_test_MIN_LLS_smallerlong_biggerulong(LONG_MIN, UINT_MIN);
-	_test_MIN_LLS_smallerlong_biggerulong(LONG_MIN, ULONG_MIN);
-
-	return 0;
-}
-
-int _test_various_MIN_LLS_biggerint_smalleruint() {
-	_test_MIN_LLS_biggerint_smalleruint(1, 0);
-	_test_MIN_LLS_biggerint_smalleruint(2, 0);
-	_test_MIN_LLS_biggerint_smalleruint(INT_MAX, 0);
-
-	_test_MIN_LLS_biggerint_smalleruint(3, 2);
-
-	_test_MIN_LLS_biggerint_smalleruint(INT_MAX, INT_MAX-1);
-	_test_MIN_LLS_biggerint_smalleruint(INT_MAX-1, INT_MAX-2);
-
-	return 0;
-}
-
-int _test_various_MIN_LLS_biggerlong_smallerulong() {
-	_test_MIN_LLS_biggerlong_smallerulong(1, 0);
-	_test_MIN_LLS_biggerlong_smallerulong(2, 0);
-	_test_MIN_LLS_biggerlong_smallerulong(INT_MAX, 0);
-	_test_MIN_LLS_biggerlong_smallerulong(LONG_MAX, 0);
-
-	_test_MIN_LLS_biggerlong_smallerulong(3, 2);
-
-	_test_MIN_LLS_biggerlong_smallerulong(LONG_MAX, LONG_MAX-1);
-	_test_MIN_LLS_biggerlong_smallerulong(LONG_MAX-1, LONG_MAX-2);
-	_test_MIN_LLS_biggerlong_smallerulong(INT_MAX, INT_MAX-1);
-	_test_MIN_LLS_biggerlong_smallerulong(INT_MAX-1, INT_MAX-2);
-
-	return 0;
-}
-
-int _test_various_MIN_LLS_equalint_equaluint() {
-	_test_MIN_LLS_equalint_equaluint(0, 0);
-	_test_MIN_LLS_equalint_equaluint(1, 1);
-	_test_MIN_LLS_equalint_equaluint(UINT_MIN, UINT_MIN);
-	_test_MIN_LLS_equalint_equaluint(INT_MAX, INT_MAX);
-	return 0;
-}
-
-int _test_various_MIN_LLS_equallong_equalulong() {
-	_test_MIN_LLS_equallong_equalulong(0, 0);
-	_test_MIN_LLS_equallong_equalulong(1, 1);
-	_test_MIN_LLS_equallong_equalulong(UINT_MIN, UINT_MIN);
-	_test_MIN_LLS_equallong_equalulong(ULONG_MIN, ULONG_MIN);
-	_test_MIN_LLS_equallong_equalulong(INT_MAX, INT_MAX);
-	_test_MIN_LLS_equallong_equalulong(LONG_MAX, LONG_MAX);
-	return 0;
-}
-
-int _test_various_MIN_LLS_hugeullong_hugerullong() {
-	_test_MIN_LLS_hugeullong_hugerullong(LLONG_MAX, LLONG_MAX+1LLU);
-	_test_MIN_LLS_hugeullong_hugerullong(LLONG_MAX+1LLU, LLONG_MAX+2LLU);
-	_test_MIN_LLS_hugeullong_hugerullong(ULLONG_MAX-1, ULLONG_MAX);
-
-	return 0;
-}
-
-int _test_various_MIN_LLS_hugerullong_hugeullong() {
-	_test_MIN_LLS_hugerullong_hugeullong(LLONG_MAX+1LLU, LLONG_MAX);
-	_test_MIN_LLS_hugerullong_hugeullong(LLONG_MAX+2LLU, LLONG_MAX+1LLU);
-	_test_MIN_LLS_hugerullong_hugeullong(ULLONG_MAX, ULLONG_MAX-1);
-
-	return 0;
-}
-
-int _test_various_MIN_LLS_biggerullong_smallerint() {
-	_test_MIN_LLS_biggerullong_smallerint(0, -1);
-
-	return 0;
-}
-
-int test_MIN_LLS() {
-	_test_various_MIN_LLS_smallerint_biggeruint();
-	_test_various_MIN_LLS_smallerlong_biggerulong();
-	_test_various_MIN_LLS_biggerint_smalleruint();
-	_test_various_MIN_LLS_biggerlong_smallerulong();
-	_test_various_MIN_LLS_equalint_equaluint();
-	_test_various_MIN_LLS_equallong_equalulong();
-	//	_test_various_MIN_LLS_hugeullong_hugerullong();
-	//	_test_various_MIN_LLS_hugerullong_hugeullong();
-	_test_various_MIN_LLS_biggerullong_smallerint();
-	return 0;
-}
-
-int _test_MIN_LLU_smallerint_biggeruint(int i, unsigned u) {
-	if (_MIN_LLU(i, u) >= u) {
-		printf("failed test _MIN_LLU(%d, %uU): %lldLL == %lluULL >= u == %uU\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
-	}
-	if (_MIN_LLU(i, u) > i) {
-		printf("failed test _MIN_LLU(%d, %uU): %lldLL == %lluULL > i == %d\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
-	}
-	if (_MIN_LLU(i, u) != i) {
-		printf("failed test _MIN_LLU(%d, %uU): %lldLL == %lluULL != i == %d\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
+int _test_MIN_biggerullong_smallerint(unsigned long long u, int i) {
+	/*if (MIN(u, i) >= u) {
+		printf("failed test %d as expected, MIN(%lluULL, %d): %lldLL == %lluULL >= u == %lluLLU\n", __LINE__, u, i, MIN(u, i), MIN(u, i), u);
+	}*/
+	if (MIN(u, i) != i) {
+		printf("failed test %d MIN(%lluULL, %d): %lldLL == %lluULL != i == %uU\n", __LINE__, u, i, MIN(u, i), MIN(u, i), i);
 	}
 	return 0;
 }
 
-int _test_MIN_LLU_smallerlong_biggerulong(long i, unsigned long u) {
-	if (_MIN_LLU(i, u) >= u) {
-		printf("failed test _MIN_LLU(%ld, %lu): %lldLL == %lluULL >= u == %lu\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
-	}
-	if (_MIN_LLU(i, u) > i) {
-		printf("failed test _MIN_LLU(%ld, %lu): %lldLL == %lluULL > i == %ld\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
-	}
-	if (_MIN_LLU(i, u) != i) {
-		printf("failed test _MIN_LLU(%ld, %lu): %lldLL == %lluULL != i == %ld\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
+int _test_MAX_biggerullong_smallerint(unsigned long long u, int i) {
+	/*if (MAX(u, i) <= i) {
+		printf("failed test %d as expected MAX(%lluULL, %d): %lldLL == %lluULL <= i == %d\n", __LINE__, u, i, MAX(u, i), MAX(u, i), i);
+	}*/
+	if (MAX(u, i) != u) {
+		printf("failed test %d MAX(%lluULL, %d): %lldLL == %lluULL != u == %lluULL\n", __LINE__, u, i, MAX(u, i), MAX(u, i), u);
 	}
 	return 0;
 }
 
-int _test_MIN_LLU_biggerint_smalleruint(int i, unsigned u) {
-	if (_MIN_LLU(i, u) >= i) {
-		printf("failed test _MIN_LLU(%d, %uU): %lldLL == %lluULL >= i == %d\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
+int _test_MIN_biggerlong_smallerulong(long i, unsigned long u) {
+	if (MIN(i, u) <= -1) {
+		printf("failed test %d MIN(%ld, %luLU): %lldLL == %lluULL <= -1 == %d == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), -1, -1);
 	}
-	if (_MIN_LLU(i, u) > u) {
-		printf("failed test _MIN_LLU(%d, %d): %lldLL == %lluULL > u == %uU\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
+	if (MIN(i, u) >= i) {
+		printf("failed test %d MIN(%ld, %luLU): %lldLL == %lluULL >= i == %ld\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
-	if (_MIN_LLU(i, u) != u) {
-		printf("failed test _MIN_LLU(%d, %d): %lldLL == %lluULL != u == %uU\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
+	if (MIN(i, u) > u) {
+		printf("failed test %d MIN(%ld, %luLU): %lldLL == %lluULL > u == %luLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
-	return 0;
-}
-
-int _test_MIN_LLU_biggerullong_smallerint(unsigned long long u, int i) {
-	if (_MIN_LLU(u, i) != i) {
-		printf("failed test _MIN_LLU(%lluULL, %d): %lldLL == %lluULL != i == %d\n", u, i, _MIN_LLU(u, i), _MIN_LLU(u, i), i);
-		return -1;
+	if (MIN(i, u) != u) {
+		printf("failed test %d MIN(%ld, %luLU): %lldLL == %lluULL != u == %luLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
 	return 0;
 }
 
-int _test_MIN_LLU_biggerlong_smallerulong(long i, unsigned long u) {
-	if (_MIN_LLU(i, u) >= i) {
-		printf("failed test _MIN_LLU(%ld, %lu): %lldLL == %lluULL >= i == %ld\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
+int _test_MAX_biggerlong_smallerulong(long i, unsigned long u) {
+	if (MAX(i, u) <= -1) {
+		printf("failed test %d MAX(%ld, %luLU): %ldL == %luLU <= -1 == %d == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), -1, -1);
 	}
-	if (_MIN_LLU(i, u) > u) {
-		printf("failed test _MIN_LLU(%ld, %ld): %lldLL == %lluULL > u == %lu\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
+	if (MAX(i, u) <= u) {
+		printf("failed test %d MAX(%ld, %luLU): %ldL == %luLU <= u == %luLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
-	if (_MIN_LLU(i, u) != u) {
-		printf("failed test _MIN_LLU(%ld, %ld): %lldLL == %lluULL != u == %lu\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
+	if (MAX(i, u) < i) {
+		printf("failed test %d MAX(%ld, %ldL): %ldLL == %luLU < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
-	return 0;
-}
-
-int _test_MIN_LLU_equalint_equaluint(int i, unsigned u) {
-	if (_MIN_LLU(i, u) != i) {
-		printf("failed test _MIN_LLU(%d, %d): %lldLL == %lluULL != i == %d\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
-	}
-	if (_MIN_LLU(i, u) != u) {
-		printf("failed test _MIN_LLU(%d, %d): %lldLL == %lluULL != u == %uU\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
+	if (MAX(i, u) != i) {
+		printf("failed test %d MAX(%ld, %ldL): %ldL == %luLU != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	return 0;
 }
 
-int _test_MIN_LLU_equallong_equalulong(long i, unsigned long u) {
-	if (_MIN_LLU(i, u) != i) {
-		printf("failed test _MIN_LLU(%ld, %ld): %lldLL == %lluULL != i == %ld\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), i);
-		return -1;
+int _test_MIN_biggerlong_smallerullong(long i, unsigned long long u) {
+	if (MIN(i, u) <= -1) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL <= -1 == %d == %u\n", __LINE__, i, u, MIN(i, u), MIN(i, u), -1, -1);
 	}
-	if (_MIN_LLU(i, u) != u) {
-		printf("failed test _MIN_LLU(%ld, %ld): %lldLL == %lluULL != u == %lu\n", i, u, _MIN_LLU(i, u), _MIN_LLU(i, u), u);
-		return -1;
+	if (MIN(i, u) >= i) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL >= i == %ld\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
 	}
-	return 0;
-}
-
-int _test_MIN_LLU_hugeullong_hugerullong(unsigned long long u1, unsigned long long u2) {
-	if (_MIN_LLU(u1, u2) < 0) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2));
-		return -1;
+	if (MIN(i, u) > u) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL > u == %lluLLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
-	if (_MIN_LLU(u1, u2) >= u2) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL >= u2 == %lluULL\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2), u2);
-		return -1;
-	}
-	if (_MIN_LLU(u1, u2) > u1) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL > u1 == %lluULL\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2), u1);
-		return -1;
-	}
-	if (_MIN_LLU(u1, u2) != u1) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL != u1 == %lluULL\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2), u1);
-		return -1;
+	if (MIN(i, u) != u) {
+		printf("failed test %d MIN(%ld, %lluLLU): %lldLL == %lluULL != u == %lluLLU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
 	}
 	return 0;
 }
 
-int _test_MIN_LLU_hugerullong_hugeullong(unsigned long long u1, unsigned long long u2) {
-	if (_MIN_LLU(u1, u2) < 0) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2));
-		return -1;
+int _test_MAX_biggerlong_smallerullong(long i, unsigned long long u) {
+	/*if (MAX(i, u) <= -1) {
+		printf("failed test %d as expected MAX(%ld, %lluLLU): %ldL == %luUL <= -1 == %d == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), -1, -1);
+	}*/
+	if (MAX(i, u) <= u) {
+		printf("failed test %d MAX(%ld, %lluLLU): %ldL == %luUL <= u == %lluLLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
-	if (_MIN_LLU(u1, u2) >= u1) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL >= u1 == %lluULL\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2), u1);
-		return -1;
+	if (MAX(i, u) < i) {
+		printf("failed test %d MAX(%ld, %lluLLU): %ldLL == %luUL < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
-	if (_MIN_LLU(u1, u2) > u2) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL > u2 == %lluULL\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2), u2);
-		return -1;
-	}
-	if (_MIN_LLU(u1, u2) != u2) {
-		printf("failed test _MIN_LLU(%lluULL, %lluULL): %lldLL == %lluULL != u2 == %lluULL\n", u1, u2, _MIN_LLU(u1, u2), _MIN_LLU(u1, u2), u2);
-		return -1;
+	if (MAX(i, u) != i) {
+		printf("failed test %d MAX(%ld, %lluLLU): %ldL == %luUL != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	return 0;
 }
 
-int _test_various_MIN_LLU_smallerint_biggeruint() {
-	_test_MIN_LLU_smallerint_biggeruint(-1, 0);
-	_test_MIN_LLU_smallerint_biggeruint(-1, 1);
-	_test_MIN_LLU_smallerint_biggeruint(-1, UINT_MAX);
+int _test_MIN_equalint_equaluint(int i, unsigned u) {
+	if (MIN(i, u) != i) {
+		printf("failed test %d MIN(%d, %d): %lldLL == %lluULL != i == %d\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
+	}
+	if (MIN(i, u) != u) {
+		printf("failed test %d MIN(%d, %d): %lldLL == %lluULL != u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
+	}
+	return 0;
+}
 
-	_test_MIN_LLU_smallerint_biggeruint(0, 1);
-	_test_MIN_LLU_smallerint_biggeruint(0, 2);
-	_test_MIN_LLU_smallerint_biggeruint(0, UINT_MAX);
+int _test_MAX_equalint_equaluint(int i, unsigned u) {
+	if (MAX(i, u) != i) {
+		printf("failed test %d MAX(%d, %d): %d == %uU != i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+	}
+	if (MAX(i, u) != u) {
+		printf("failed test %d MAX(%d, %d): %d == %uU != u == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+	}
+	return 0;
+}
 
-	_test_MIN_LLU_smallerint_biggeruint(1, 2);
-	_test_MIN_LLU_smallerint_biggeruint(1, 3);
-	_test_MIN_LLU_smallerint_biggeruint(1, UINT_MAX);
+int _test_MIN_equallong_equalulong(long i, unsigned long u) {
+	if (MIN(i, u) != i) {
+		printf("failed test %d MIN(%ld, %ld): %lldLL == %lluULL != i == %ldL\n", __LINE__, i, u, MIN(i, u), MIN(i, u), i);
+	}
+	if (MIN(i, u) != u) {
+		printf("failed test %d MIN(%ld, %ld): %lldLL == %lluULL != u == %luUL\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
+	}
+	return 0;
+}
 
-	_test_MIN_LLU_smallerint_biggeruint(INT_MIN, 0);
-	_test_MIN_LLU_smallerint_biggeruint(INT_MIN, 2);
-	_test_MIN_LLU_smallerint_biggeruint(INT_MIN, UINT_MAX);
-	_test_MIN_LLU_smallerint_biggeruint(INT_MIN, UINT_MIN);
+int _test_MAX_equallong_equalulong(long i, unsigned long u) {
+	if (MAX(i, u) != i) {
+		printf("failed test %d MAX(%ld, %ld): %ldL == %luUL != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+	}
+	if (MAX(i, u) != u) {
+		printf("failed test %d MAX(%ld, %ld): %ldL == %luUL != u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+	}
+	return 0;
+}
+
+int _test_MIN_hugeullong_hugerullong(unsigned long long u1, unsigned long long u2) {
+	/*if (MIN(u1, u2) < 0) {
+		printf("failed test %d as expected MIN(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2));
+	}*/
+	if (MIN(u1, u2) >= u2) {
+		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL >= u2 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u2);
+	}
+	if (MIN(u1, u2) > u1) {
+		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL > u1 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u1);
+	}
+	if (MIN(u1, u2) != u1) {
+		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL != u1 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u1);
+	}
+	return 0;
+}
+
+int _test_MAX_hugeullong_hugerullong(unsigned long long u1, unsigned long long u2) {
+	if (MAX(u1, u2) < 0) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2));
+	}
+	if (MAX(u1, u2) <= u1) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL <= u1 == %lluULL\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2), u1);
+	}
+	if (MAX(u1, u2) > u2) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL > u2 == %lluULL\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2), u2);
+	}
+	if (MAX(u1, u2) != u2) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL != u2 == %lluULL\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2), u2);
+	}
+	return 0;
+}
+
+int _test_MIN_hugerullong_hugeullong(unsigned long long u1, unsigned long long u2) {
+	/*if (MIN(u1, u2) < 0) {
+		printf("failed test %d as expected MIN(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2));
+	}*/
+	if (MIN(u1, u2) >= u1) {
+		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL >= u1 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u1);
+	}
+	if (MIN(u1, u2) > u2) {
+		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL > u2 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u2);
+	}
+	if (MIN(u1, u2) != u2) {
+		printf("failed test %d MIN(%lluULL, %lluULL): %lldLL == %lluULL != u2 == %lluULL\n", __LINE__, u1, u2, MIN(u1, u2), MIN(u1, u2), u2);
+	}
+	return 0;
+}
+
+int _test_MAX_hugerullong_hugeullong(unsigned long long u1, unsigned long long u2) {
+	if (MAX(u1, u2) < 0) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL < 0\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2));
+	}
+	if (MAX(u1, u2) <= u2) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL <= u2 == %lluULL\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2), u2);
+	}
+	if (MAX(u1, u2) > u1) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL > u1 == %lluULL\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2), u1);
+	}
+	if (MAX(u1, u2) != u1) {
+		printf("failed test %d MAX(%lluULL, %lluULL): %lldLL == %lluULL != u1 == %lluULL\n", __LINE__, u1, u2, MAX(u1, u2), MAX(u1, u2), u1);
+	}
+	return 0;
+}
+
+int _test_various_MIN_smallerint_biggeruint() {
+	_test_MIN_smallerint_biggeruint(-1, 0);
+	_test_MIN_smallerint_biggeruint(-1, 1);
+	_test_MIN_smallerint_biggeruint(-1, UINT_MAX);
+
+	_test_MIN_smallerint_biggeruint(0, 1);
+	_test_MIN_smallerint_biggeruint(0, 2);
+	_test_MIN_smallerint_biggeruint(0, UINT_MAX);
+
+	_test_MIN_smallerint_biggeruint(1, 2);
+	_test_MIN_smallerint_biggeruint(1, 3);
+	_test_MIN_smallerint_biggeruint(1, UINT_MAX);
+
+	_test_MIN_smallerint_biggeruint(INT_MIN, 0);
+	_test_MIN_smallerint_biggeruint(INT_MIN, 2);
+	_test_MIN_smallerint_biggeruint(INT_MIN, UINT_MAX);
+	_test_MIN_smallerint_biggeruint(INT_MIN, UINT_MIN);
 
 	return 0;
 }
 
-int _test_various_MIN_LLU_smallerlong_biggerulong() {
-	_test_MIN_LLU_smallerlong_biggerulong(-1, 0);
-	_test_MIN_LLU_smallerlong_biggerulong(-1, 1);
-	_test_MIN_LLU_smallerlong_biggerulong(-1, UINT_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(-1, ULONG_MAX);
+int _test_various_MAX_smallerint_biggeruint() {
+	_test_MAX_smallerint_biggeruint(-1, 0);
+	_test_MAX_smallerint_biggeruint(-1, 1);
+	_test_MAX_smallerint_biggeruint(-1, UINT_MAX);
 
-	_test_MIN_LLU_smallerlong_biggerulong(0, 1);
-	_test_MIN_LLU_smallerlong_biggerulong(0, 2);
-	_test_MIN_LLU_smallerlong_biggerulong(0, UINT_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(0, ULONG_MAX);
+	_test_MAX_smallerint_biggeruint(0, 1);
+	_test_MAX_smallerint_biggeruint(0, 2);
+	_test_MAX_smallerint_biggeruint(0, UINT_MAX);
 
-	_test_MIN_LLU_smallerlong_biggerulong(1, 2);
-	_test_MIN_LLU_smallerlong_biggerulong(1, 3);
-	_test_MIN_LLU_smallerlong_biggerulong(1, UINT_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(1, ULONG_MAX);
+	_test_MAX_smallerint_biggeruint(1, 2);
+	_test_MAX_smallerint_biggeruint(1, 3);
+	_test_MAX_smallerint_biggeruint(1, UINT_MAX);
 
-	_test_MIN_LLU_smallerlong_biggerulong(INT_MIN, 0);
-	_test_MIN_LLU_smallerlong_biggerulong(INT_MIN, 2);
-	_test_MIN_LLU_smallerlong_biggerulong(INT_MIN, UINT_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(INT_MIN, ULONG_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(INT_MIN, UINT_MIN);
-	_test_MIN_LLU_smallerlong_biggerulong(INT_MIN, ULONG_MIN);
-
-	_test_MIN_LLU_smallerlong_biggerulong(LONG_MIN, 0);
-	_test_MIN_LLU_smallerlong_biggerulong(LONG_MIN, 2);
-	_test_MIN_LLU_smallerlong_biggerulong(LONG_MIN, UINT_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(LONG_MIN, ULONG_MAX);
-	_test_MIN_LLU_smallerlong_biggerulong(LONG_MIN, UINT_MIN);
-	_test_MIN_LLU_smallerlong_biggerulong(LONG_MIN, ULONG_MIN);
+	_test_MAX_smallerint_biggeruint(INT_MIN, 0);
+	_test_MAX_smallerint_biggeruint(INT_MIN, 2);
+	_test_MAX_smallerint_biggeruint(INT_MIN, UINT_MAX);
+	_test_MAX_smallerint_biggeruint(INT_MIN, UINT_MIN);
 
 	return 0;
 }
 
-int _test_various_MIN_LLU_biggerint_smalleruint() {
-	_test_MIN_LLU_biggerint_smalleruint(1, 0);
-	_test_MIN_LLU_biggerint_smalleruint(2, 0);
-	_test_MIN_LLU_biggerint_smalleruint(INT_MAX, 0);
+int _test_various_MIN_smallerlong_biggerulong() {
+	_test_MIN_smallerlong_biggerulong(-1, 0);
+	_test_MIN_smallerlong_biggerulong(-1, 1);
+	_test_MIN_smallerlong_biggerulong(-1, UINT_MAX);
+	_test_MIN_smallerlong_biggerulong(-1, ULONG_MAX);
 
-	_test_MIN_LLU_biggerint_smalleruint(3, 2);
+	_test_MIN_smallerlong_biggerulong(0, 1);
+	_test_MIN_smallerlong_biggerulong(0, 2);
+	_test_MIN_smallerlong_biggerulong(0, UINT_MAX);
+	_test_MIN_smallerlong_biggerulong(0, ULONG_MAX);
 
-	_test_MIN_LLU_biggerint_smalleruint(INT_MAX, INT_MAX-1);
-	_test_MIN_LLU_biggerint_smalleruint(INT_MAX-1, INT_MAX-2);
+	_test_MIN_smallerlong_biggerulong(1, 2);
+	_test_MIN_smallerlong_biggerulong(1, 3);
+	_test_MIN_smallerlong_biggerulong(1, UINT_MAX);
+	_test_MIN_smallerlong_biggerulong(1, ULONG_MAX);
 
-	return 0;
-}
+	_test_MIN_smallerlong_biggerulong(INT_MIN, 0);
+	_test_MIN_smallerlong_biggerulong(INT_MIN, 2);
+	_test_MIN_smallerlong_biggerulong(INT_MIN, UINT_MAX);
+	_test_MIN_smallerlong_biggerulong(INT_MIN, ULONG_MAX);
+	_test_MIN_smallerlong_biggerulong(INT_MIN, UINT_MIN);
+	_test_MIN_smallerlong_biggerulong(INT_MIN, ULONG_MIN);
 
-int _test_various_MIN_LLU_biggerlong_smallerulong() {
-	_test_MIN_LLU_biggerlong_smallerulong(1, 0);
-	_test_MIN_LLU_biggerlong_smallerulong(2, 0);
-	_test_MIN_LLU_biggerlong_smallerulong(INT_MAX, 0);
-	_test_MIN_LLU_biggerlong_smallerulong(LONG_MAX, 0);
-
-	_test_MIN_LLU_biggerlong_smallerulong(3, 2);
-
-	_test_MIN_LLU_biggerlong_smallerulong(LONG_MAX, LONG_MAX-1);
-	_test_MIN_LLU_biggerlong_smallerulong(LONG_MAX-1, LONG_MAX-2);
-	_test_MIN_LLU_biggerlong_smallerulong(INT_MAX, INT_MAX-1);
-	_test_MIN_LLU_biggerlong_smallerulong(INT_MAX-1, INT_MAX-2);
-
-	return 0;
-}
-
-int _test_various_MIN_LLU_equalint_equaluint() {
-	_test_MIN_LLU_equalint_equaluint(0, 0);
-	_test_MIN_LLU_equalint_equaluint(1, 1);
-	_test_MIN_LLU_equalint_equaluint(UINT_MIN, UINT_MIN);
-	_test_MIN_LLU_equalint_equaluint(INT_MAX, INT_MAX);
-	return 0;
-}
-
-int _test_various_MIN_LLU_equallong_equalulong() {
-	_test_MIN_LLU_equallong_equalulong(0, 0);
-	_test_MIN_LLU_equallong_equalulong(1, 1);
-	_test_MIN_LLU_equallong_equalulong(UINT_MIN, UINT_MIN);
-	_test_MIN_LLU_equallong_equalulong(ULONG_MIN, ULONG_MIN);
-	_test_MIN_LLU_equallong_equalulong(INT_MAX, INT_MAX);
-	_test_MIN_LLU_equallong_equalulong(LONG_MAX, LONG_MAX);
-	return 0;
-}
-
-int _test_various_MIN_LLU_hugeullong_hugerullong() {
-	_test_MIN_LLU_hugeullong_hugerullong(LLONG_MAX, LLONG_MAX+1LLU);
-	_test_MIN_LLU_hugeullong_hugerullong(LLONG_MAX+1LLU, LLONG_MAX+2LLU);
-	_test_MIN_LLU_hugeullong_hugerullong(ULLONG_MAX-1, ULLONG_MAX);
+	_test_MIN_smallerlong_biggerulong(LONG_MIN, 0);
+	_test_MIN_smallerlong_biggerulong(LONG_MIN, 2);
+	_test_MIN_smallerlong_biggerulong(LONG_MIN, UINT_MAX);
+	_test_MIN_smallerlong_biggerulong(LONG_MIN, ULONG_MAX);
+	_test_MIN_smallerlong_biggerulong(LONG_MIN, UINT_MIN);
+	_test_MIN_smallerlong_biggerulong(LONG_MIN, ULONG_MIN);
 
 	return 0;
 }
 
-int _test_various_MIN_LLU_hugerullong_hugeullong() {
-	_test_MIN_LLU_hugerullong_hugeullong(LLONG_MAX+1LLU, LLONG_MAX);
-	_test_MIN_LLU_hugerullong_hugeullong(LLONG_MAX+2LLU, LLONG_MAX+1LLU);
-	_test_MIN_LLU_hugerullong_hugeullong(ULLONG_MAX, ULLONG_MAX-1);
+int _test_various_MAX_smallerlong_biggerulong() {
+	_test_MAX_smallerlong_biggerulong(-1, 0);
+	_test_MAX_smallerlong_biggerulong(-1, 1);
+	_test_MAX_smallerlong_biggerulong(-1, UINT_MAX);
+	_test_MAX_smallerlong_biggerulong(-1, ULONG_MAX);
+
+	_test_MAX_smallerlong_biggerulong(0, 1);
+	_test_MAX_smallerlong_biggerulong(0, 2);
+	_test_MAX_smallerlong_biggerulong(0, UINT_MAX);
+	_test_MAX_smallerlong_biggerulong(0, ULONG_MAX);
+
+	_test_MAX_smallerlong_biggerulong(1, 2);
+	_test_MAX_smallerlong_biggerulong(1, 3);
+	_test_MAX_smallerlong_biggerulong(1, UINT_MAX);
+	_test_MAX_smallerlong_biggerulong(1, ULONG_MAX);
+
+	_test_MAX_smallerlong_biggerulong(INT_MIN, 0);
+	_test_MAX_smallerlong_biggerulong(INT_MIN, 2);
+	_test_MAX_smallerlong_biggerulong(INT_MIN, UINT_MAX);
+	_test_MAX_smallerlong_biggerulong(INT_MIN, ULONG_MAX);
+	_test_MAX_smallerlong_biggerulong(INT_MIN, UINT_MIN);
+	_test_MAX_smallerlong_biggerulong(INT_MIN, ULONG_MIN);
+
+	_test_MAX_smallerlong_biggerulong(LONG_MIN, 0);
+	_test_MAX_smallerlong_biggerulong(LONG_MIN, 2);
+	_test_MAX_smallerlong_biggerulong(LONG_MIN, UINT_MAX);
+	_test_MAX_smallerlong_biggerulong(LONG_MIN, ULONG_MAX);
+	_test_MAX_smallerlong_biggerulong(LONG_MIN, UINT_MIN);
+	_test_MAX_smallerlong_biggerulong(LONG_MIN, ULONG_MIN);
 
 	return 0;
 }
 
-int _test_various_MIN_LLU_biggerullong_smallerint() {
-	_test_MIN_LLU_biggerullong_smallerint(0, -1);
+int _test_various_MIN_biggerint_smalleruint() {
+	_test_MIN_biggerint_smalleruint(1, 0);
+	_test_MIN_biggerint_smalleruint(2, 0);
+	_test_MIN_biggerint_smalleruint(INT_MAX, 0);
+
+	_test_MIN_biggerint_smalleruint(3, 2);
+
+	_test_MIN_biggerint_smalleruint(INT_MAX, INT_MAX-1);
+	_test_MIN_biggerint_smalleruint(INT_MAX-1, INT_MAX-2);
 
 	return 0;
 }
 
-int test_MIN_LLU() {
-	_test_various_MIN_LLU_smallerint_biggeruint();
-	_test_various_MIN_LLU_smallerlong_biggerulong();
-	_test_various_MIN_LLU_biggerint_smalleruint();
-	_test_various_MIN_LLU_biggerlong_smallerulong();
-	_test_various_MIN_LLU_equalint_equaluint();
-	_test_various_MIN_LLU_equallong_equalulong();
-	_test_various_MIN_LLU_hugeullong_hugerullong();
-	_test_various_MIN_LLU_hugerullong_hugeullong();
-	_test_various_MIN_LLU_biggerullong_smallerint();
+int _test_various_MAX_biggerint_smalleruint() {
+	_test_MAX_biggerint_smalleruint(1, 0);
+	_test_MAX_biggerint_smalleruint(2, 0);
+	_test_MAX_biggerint_smalleruint(INT_MAX, 0);
+
+	_test_MAX_biggerint_smalleruint(3, 2);
+
+	_test_MAX_biggerint_smalleruint(INT_MAX, INT_MAX-1);
+	_test_MAX_biggerint_smalleruint(INT_MAX-1, INT_MAX-2);
+
+	return 0;
+}
+
+int _test_various_MIN_biggerlong_smallerulong() {
+	_test_MIN_biggerlong_smallerulong(1, 0);
+	_test_MIN_biggerlong_smallerulong(2, 0);
+	_test_MIN_biggerlong_smallerulong(INT_MAX, 0);
+	_test_MIN_biggerlong_smallerulong(LONG_MAX, 0);
+
+	_test_MIN_biggerlong_smallerulong(3, 2);
+
+	_test_MIN_biggerlong_smallerulong(LONG_MAX, LONG_MAX-1);
+	_test_MIN_biggerlong_smallerulong(LONG_MAX-1, LONG_MAX-2);
+	_test_MIN_biggerlong_smallerulong(INT_MAX, INT_MAX-1);
+	_test_MIN_biggerlong_smallerulong(INT_MAX-1, INT_MAX-2);
+
+	return 0;
+}
+
+int _test_various_MAX_biggerlong_smallerulong() {
+	_test_MAX_biggerlong_smallerulong(1, 0);
+	_test_MAX_biggerlong_smallerulong(2, 0);
+	_test_MAX_biggerlong_smallerulong(INT_MAX, 0);
+	_test_MAX_biggerlong_smallerulong(LONG_MAX, 0);
+
+	_test_MAX_biggerlong_smallerulong(3, 2);
+
+	_test_MAX_biggerlong_smallerulong(LONG_MAX, LONG_MAX-1);
+	_test_MAX_biggerlong_smallerulong(LONG_MAX-1, LONG_MAX-2);
+	_test_MAX_biggerlong_smallerulong(INT_MAX, INT_MAX-1);
+	_test_MAX_biggerlong_smallerulong(INT_MAX-1, INT_MAX-2);
+
+	return 0;
+}
+
+int _test_various_MIN_biggerlong_smallerullong() {
+	_test_MIN_biggerlong_smallerullong(1, 0);
+	_test_MIN_biggerlong_smallerullong(2, 0);
+	_test_MIN_biggerlong_smallerullong(INT_MAX, 0);
+	_test_MIN_biggerlong_smallerullong(LONG_MAX, 0);
+
+	_test_MIN_biggerlong_smallerullong(3, 2);
+
+	_test_MIN_biggerlong_smallerullong(LONG_MAX, LONG_MAX-1);
+	_test_MIN_biggerlong_smallerullong(LONG_MAX-1, LONG_MAX-2);
+	_test_MIN_biggerlong_smallerullong(INT_MAX, INT_MAX-1);
+	_test_MIN_biggerlong_smallerullong(INT_MAX-1, INT_MAX-2);
+
+	return 0;
+}
+
+int _test_various_MAX_biggerlong_smallerullong() {
+	_test_MAX_biggerlong_smallerullong(1, 0);
+	_test_MAX_biggerlong_smallerullong(2, 0);
+	_test_MAX_biggerlong_smallerullong(INT_MAX, 0);
+	_test_MAX_biggerlong_smallerullong(LONG_MAX, 0);
+
+	_test_MAX_biggerlong_smallerullong(3, 2);
+
+	_test_MAX_biggerlong_smallerullong(LONG_MAX, LONG_MAX-1);
+	_test_MAX_biggerlong_smallerullong(LONG_MAX-1, LONG_MAX-2);
+	_test_MAX_biggerlong_smallerullong(INT_MAX, INT_MAX-1);
+	_test_MAX_biggerlong_smallerullong(INT_MAX-1, INT_MAX-2);
+
+	return 0;
+}
+
+int _test_various_MIN_equalint_equaluint() {
+	_test_MIN_equalint_equaluint(0, 0);
+	_test_MIN_equalint_equaluint(1, 1);
+	_test_MIN_equalint_equaluint(UINT_MIN, UINT_MIN);
+	_test_MIN_equalint_equaluint(INT_MAX, INT_MAX);
+	return 0;
+}
+
+int _test_various_MAX_equalint_equaluint() {
+	_test_MAX_equalint_equaluint(0, 0);
+	_test_MAX_equalint_equaluint(1, 1);
+	_test_MAX_equalint_equaluint(UINT_MIN, UINT_MIN);
+	_test_MAX_equalint_equaluint(INT_MAX, INT_MAX);
+	return 0;
+}
+
+int _test_various_MIN_equallong_equalulong() {
+	_test_MIN_equallong_equalulong(0, 0);
+	_test_MIN_equallong_equalulong(1, 1);
+	_test_MIN_equallong_equalulong(UINT_MIN, UINT_MIN);
+	_test_MIN_equallong_equalulong(ULONG_MIN, ULONG_MIN);
+	_test_MIN_equallong_equalulong(INT_MAX, INT_MAX);
+	_test_MIN_equallong_equalulong(LONG_MAX, LONG_MAX);
+	return 0;
+}
+
+int _test_various_MAX_equallong_equalulong() {
+	_test_MAX_equallong_equalulong(0, 0);
+	_test_MAX_equallong_equalulong(1, 1);
+	_test_MAX_equallong_equalulong(UINT_MIN, UINT_MIN);
+	_test_MAX_equallong_equalulong(ULONG_MIN, ULONG_MIN);
+	_test_MAX_equallong_equalulong(INT_MAX, INT_MAX);
+	_test_MAX_equallong_equalulong(LONG_MAX, LONG_MAX);
+	return 0;
+}
+
+int _test_various_MIN_hugeullong_hugerullong() {
+	_test_MIN_hugeullong_hugerullong(LLONG_MAX, LLONG_MAX+1LLU);
+	_test_MIN_hugeullong_hugerullong(LLONG_MAX+1LLU, LLONG_MAX+2LLU);
+	_test_MIN_hugeullong_hugerullong(ULLONG_MAX-1, ULLONG_MAX);
+
+	return 0;
+}
+
+int _test_various_MAX_hugeullong_hugerullong() {
+	_test_MAX_hugeullong_hugerullong(LLONG_MAX, LLONG_MAX+1LLU);
+	_test_MAX_hugeullong_hugerullong(LLONG_MAX+1LLU, LLONG_MAX+2LLU);
+	_test_MAX_hugeullong_hugerullong(ULLONG_MAX-1, ULLONG_MAX);
+
+	return 0;
+}
+
+int _test_various_MIN_hugerullong_hugeullong() {
+	_test_MIN_hugerullong_hugeullong(LLONG_MAX+1LLU, LLONG_MAX);
+	_test_MIN_hugerullong_hugeullong(LLONG_MAX+2LLU, LLONG_MAX+1LLU);
+	_test_MIN_hugerullong_hugeullong(ULLONG_MAX, ULLONG_MAX-1);
+
+	return 0;
+}
+
+int _test_various_MAX_hugerullong_hugeullong() {
+	_test_MAX_hugerullong_hugeullong(LLONG_MAX+1LLU, LLONG_MAX);
+	_test_MAX_hugerullong_hugeullong(LLONG_MAX+2LLU, LLONG_MAX+1LLU);
+	_test_MAX_hugerullong_hugeullong(ULLONG_MAX, ULLONG_MAX-1);
+
+	return 0;
+}
+
+int _test_various_MIN_biggerulong_smallerint() {
+	_test_MIN_biggerulong_smallerint(0, -1);
+
+	return 0;
+}
+
+int _test_various_MIN_biggerullong_smallerint() {
+	_test_MIN_biggerullong_smallerint(0, -1);
+
+	return 0;
+}
+
+int _test_various_MAX_biggerulong_smallerint() {
+	_test_MAX_biggerulong_smallerint(0, -1);
+
+	return 0;
+}
+
+int _test_various_MAX_biggerullong_smallerint() {
+	_test_MAX_biggerullong_smallerint(0, -1);
+
+	return 0;
+}
+
+int test_MIN() {
+	_test_various_MIN_smallerint_biggeruint();
+	_test_various_MIN_smallerlong_biggerulong();
+	_test_various_MIN_biggerint_smalleruint();
+	_test_various_MIN_biggerlong_smallerulong();
+	_test_various_MIN_biggerlong_smallerullong();
+	_test_various_MIN_equalint_equaluint();
+	_test_various_MIN_equallong_equalulong();
+	_test_various_MIN_hugeullong_hugerullong();
+	_test_various_MIN_hugerullong_hugeullong();
+	_test_various_MIN_biggerulong_smallerint();
+	_test_various_MIN_biggerullong_smallerint();
+	return 0;
+}
+
+/** This test was designed to exercise each branch of the conditional expressions in _FASTER_MAX_SAFE, hence the name "transparentbox". */
+int test_MAX_transparentbox() {
+	signed char x = 0;
+	signed char y = -1;
+	unsigned long z = 0;
+	signed char a = 1;
+	unsigned long b = 2;
+	/* 1, 1, x */
+	if (MAX(x, y) != x) {
+		printf("failed test %d MAX(%c, %c): %c == %ldL == %luUL != %c\n", __LINE__, x, y, MAX(x, y), MAX(x, y), x);
+	}
+	/* 1, 1, y */
+	if (MAX(y, x) != x) {
+		printf("failed test %d MAX(%c, %c): %c == %ldL == %luUL != %c\n", __LINE__, y, x, MAX(y, x), MAX(y, x), x);
+	}
+	/* 1, 0, 1 */
+	if (MAX(y, z) != z) {
+		printf("failed test %d MAX(%c, %luUL): %ldL == %luUL != %luUL\n", __LINE__, y, z, MAX(y, z), MAX(y, z), z);
+	}
+	/* 1, 0, 0, x */
+	if (MAX(a, z) != a) {
+		printf("failed test %d MAX(%c, %luUL): %ldL == %luUL != %c\n", __LINE__, a, z, MAX(a, z), MAX(a, z), a);
+	}
+	/* 1, 0, 0, y */
+	if (MAX(a, b) != b) {
+		printf("failed test %d MAX(%c, %luUL): %ldL == %luUL != %luUL\n", __LINE__, a, b, MAX(a, b), MAX(a, b), b);
+	}
+	/* 0, 1, 1 */
+	if (MAX(z, y) != z) {
+		printf("failed test %d MAX(%luUL, %c): %ldL == %luUL != %c\n", __LINE__, z, y, MAX(z, y), MAX(z, y), z);
+	}
+	/* 0, 1, 0, x */
+	if (MAX(b, a) != b) {
+		printf("failed test %d MAX(%luUL, %c): %ldL == %luUL != %luUL\n", __LINE__, b, a, MAX(b, a), MAX(b, a), b);
+	}
+	/* 0, 1, 0, y */
+	if (MAX(z, a) != a) {
+		printf("failed test %d MAX(%luUL, %c): %ldL == %luUL != %c\n", __LINE__, z, a, MAX(z, a), MAX(z, a), a);
+	}
+	/* 0, 0, x */
+	if (MAX(b, z) != b) {
+		printf("failed test %d MAX(%luUL, %luUL): %ldL == %luUL != %luUL\n", __LINE__, b, z, MAX(b, z), MAX(b, z), b);
+	}
+	/* 0, 0, y */
+	if (MAX(z, b) != b) {
+		printf("failed test %d MAX(%luUL, %luUL): %ldL == %luUL != %luUL\n", __LINE__, z, b, MAX(z, b), MAX(z, b), b);
+	}
+}
+
+int test_MAX() {
+	test_MAX_transparentbox();
+	_test_various_MAX_smallerint_biggeruint();
+	_test_various_MAX_smallerlong_biggerulong();
+	_test_various_MAX_biggerint_smalleruint();
+	_test_various_MAX_biggerlong_smallerulong();
+	_test_various_MAX_biggerlong_smallerullong();
+	_test_various_MAX_equalint_equaluint();
+	_test_various_MAX_equallong_equalulong();
+	_test_various_MAX_hugeullong_hugerullong();
+	_test_various_MAX_hugerullong_hugeullong();
+	_test_various_MAX_biggerulong_smallerint();
+	_test_various_MAX_biggerullong_smallerint();
 	return 0;
 }
 
 int test_exhausterr()
 {
 	CHECKMALLOC((const char*const)malloc(UINT_MAX));
-	return -1;
 }
 
 int test_morelimits()
@@ -909,19 +1156,30 @@ void print_morelimits() {
 	printf("Z_LLONG_MIN:                   %40lld\n", Z_LLONG_MIN);
 }
 
-int main(int argv, char**argc)
-{
+int test() {
 	/*print_morelimits();*/
-	test_OPERAND_IS_SIGNED();
 	test_FITS_INTO_SIGNED_INT();
+	test_PROMOTES_TO_SIGNED_TYPE();
 	test_overflow();
 	test_morelimits();
 	test_gcc_ifexpr();
-	/*test_minmax_flexible_crazybadargs();*/
-	test_MIN_LLS();
-	test_MIN_LLU();
+	/*test_MIN_crazybadargs();*/
+	test_MIN();
+	test_MAX();
 	test_minmax_fast();
-	test_gcc_ifexpr();
 	/*test_exhausterr();*/
 	return 0;
 }
+
+int bench() {
+	int i;
+	for (i=0; i<20000000;i++) {
+		test_MAX();
+	}
+	return 0;
+}
+
+int main(int argv, char**argc) {
+	return test();
+}
+

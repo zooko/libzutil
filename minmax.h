@@ -8,71 +8,68 @@
 #ifndef __INCL_minmax_h
 #define __INCL_minmax_h
 
+#include "minmaximp.h" /* implementation stuff that you needn't see in order to use the library */
+
 /**
  * How to use these macros:
  *
- * You can use the MAX() macro safely.  You can use the MIN() macro safely xxx
-XXXXX
+ * MAX
  *
- * If you know that at least one of the operands is guaranteed to be less than 
- * or equal to MAX_LLONG then you should use _MIN_LLS_FLEXIBLE.  For example: 
- * if one of the operands is a signed char, unsigned char, short, 
- * unsigned short, int, unsigned int, long, unsigned long, or long long (that 
- * is: signed long long), then you are safe using _MIN_LLS_FLEXIBLE.
- */
-
-
-
-/**
- * This macro just does what you expect.  It evaluates to the largest of the 
- * two operands, and the type of the result is a reasonable type for storing 
- * that result, for example it is a signed int if both the operands were 
- * signed ints, it is an unsigned int if either operand was an unsigned int, 
- * it is a double if either operands were a double, etc.
+ * You can just use MAX(), and it will do the right thing.  There is one detail 
+ * about C that you ought to keep in mind, which is that if either of the two 
+ * operands is of type unsigned long long, then the result will be of 
+ * unsigned long long, which means that if you compare the result to a number of 
+ * a signed type you'll get the wrong answer, e.g. the following will evaluate 
+ * to false: MAX(2, 1LLU) > -1
+ * This is just something that you should be aware of as a C programmer -- it 
+ * happens anytime a signed value is compared to an unsigned value and has 
+ * nothing to do with the MAX macro.  (As a matter of fact, the MAX macro 
+ * casts the result to signed long long, unless the result is too big to fit 
+ * into a signed long long.  That's why (MAX(2, 1LU) > -1) is true, just as you 
+ * would expect if you didn't know about C's integer promotion rules.  Other 
+ * than making such comparisons come out true, this cast has no effect.)
+ * 
+ * MIN
  *
- * You can even use _MAX on pairs of pointers and it will do the correct thing 
- * for pointer comparison in C.  (Note: you may be surprised if you don't know 
- * what the correct thing for pointer comparison in C *is*, exactly.  It isn't 
- * a simple rule of "compare memory addresses numerically".)
+ * You can just use MIN(), and it will do the right thing *unless* both of the 
+ * operands are unsigned long longs containing values larger than LLONG_MAX, in 
+ * which case it will still do the right thing except that the result will be 
+ * cast to type signed long long, the consequences of which are 
+ * implementation-dependent.
+ *
+ * (I suspect that on most platforms you can cast the result back to 
+ * unsigned long long and you'll have the right answer, but this isn't 
+ * guaranteed by the C standard.  Also, if you use the result without casting it 
+ * to unsigned long long then you can get wrong behavior, for example the 
+ * following will evaluate to true:
+ * MIN(LLONG_MAX+1LLU, LLONG_MAX+2LLU) < 0)
+ *
+ * Anyway, if you are taking the min of two unsigned long longs and you want to 
+ * be sure that you'll get the right answer on any standard-conforming 
+ * C implementation, then use "MIN_LLU" instead of "MIN".  MIN_LLU casts the 
+ * result to type unsigned long long, which means if the winning operand (the 
+ * smallest one of the two) is negative, then it will be coerced into a 
+ * non-negative number of the unsigned long long type.  (Again, you might get 
+ * away with this, depending on what you do with the result and on depending on 
+ * your C compiler and machine.)
+ *
+ * So to be safe, use MIN, unless both of the arguments are of type 
+ * unsigned long long, in which case you should use MIN_LLU.
+ *
+ * debug mode
+ *
+ * Now if you compiled in debug mode (the NDEBUG flag was unset), then each of 
+ * these macros will cause a floating point exception (a divide-by-zero error) 
+ * rather than returning a potentially incorrect result.  That is the MIN macro 
+ * will cause a floating point exception if both of the operands are 
+ * unsigned long longs and both of their values are greater than LLONG_MAX, and 
+ * the MIN_LLU macro will cause a floating point exception if the smallest of 
+ * the two operands is a negative number.
+ *
+ * This is to help you locate the potentially incorrect MIN and change it from 
+ * MIN to MIN_LLU (if both of the operands are unsigned long longs) or from 
+ * MIN_LLU to MIN (if one of the operands might be negative).
  */
-#define _MAX(x, y) (((x)>0&&(y)<=0)?(x):(((y)>0&&(x)<=0)?(y):(((x)>(y))?(x):(y))))
-
-/**
- * This MIN macro tries to just do what you would expect, but the result is 
- * cast to type long long, which means that if both of the operands are 
- * unsigned long longs and both are larger than MAX_LLONG (i.e., so big that 
- * they cannot be represented normally in a signed long long), then the answer 
- * will be of the wrong type (signed long long), and could also (depending on 
- * your C implementation) have an incorrect value.  On some C implementations 
- * (e.g. GCC), the answer will actually have the right value and casting it 
- * back to unsigned long long will fix it.
-XXX
- */
-#define _MIN_LLS(x, y) (((x)<0&&(y)>=0)?((long long)(x)):(((y)<0&&(x)>=0)?((long long)(y)):(((x)<(y))?((long long)(x)):((long long)(y)))))
-
-/**
- * This MIN macro tries to just do what you would expect, but if the winning 
- * operand is a negative signed integer and the other operand is of unsigned 
- * long long type, then the result will be the correct answer (the value of 
- * the winning operand) but it will be cast to type unsigned long long.  This 
- * will work, with GCC, if the context in which you are calling 
- * _MIN_LLU_FLEXIBLE coerces the value back to signed type, for example: 
- * int x = _MIN_LLU_FLEXIBLE(-2, 1ULL);
- * will do what you expect (although it is not required to do by the 
- * standard).  However it will not do what you expect if the context does not 
- * coerce the value to a signed, for example:
- * _MIN_LLU_FLEXIBLE(-2, 1ULL) > 0
- * will evaluate to true!
- */
-#define _MIN_LLU(x, y) (((x)<0&&(y)>=0)?(x):(((y)<0&&(x)>=0)?(y):(((x)<(y))?((unsigned long long)(x)):((unsigned long long)(y)))))
-
-/**
- * Min/max macros that are fast but unsafe.  If one of the arguments is 
- * negative and the other is of unsigned type, you'll get the wrong answer.  
- */
-#define _MIN_FAST(x, y) ((x)<(y)?(x):(y))
-#define _MAX_FAST(x, y) ((x)>(y)?(x):(y))
-
 
 #endif /* #ifndef __INCL_minmax_h */
 

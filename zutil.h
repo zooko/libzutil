@@ -14,12 +14,12 @@
 #include <limits.h>
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.5 2003/08/09 13:19:53 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.6 2003/12/12 20:43:06 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 0;
-static char const* const zutil_vernum = "0.9.0";
+static int const zutil_vermicro = 1;
+static char const* const zutil_vernum = "0.9.1";
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 
@@ -28,12 +28,14 @@ static char const* const zutil_vernum = "0.9.0";
 typedef unsigned char zbyte;
 
 /*
+Returns ceil(x/y): the smallest integer which is greater than or equal to x/y.
+
 divceil(x, y) is better than (x+(y-1))/y because the latter can overflow in 
-the addition.  Also divceil() is probably faster, since GCC 3.0, for example, 
-will generate code that does a single division operation and then uses both 
-the quotient and the remainder.  Unfortunately the macro version of divceil() 
-suffers from "the macro problem" -- if its argument expressions have side 
-effects, the side effects happen twice.
+the addition.  Also divceil() is usually faster.
+
+Unfortunately the macro version of divceil() suffers from "the macro 
+problem" -- if its argument expressions have side effects, the side effects 
+happen twice.
 */
 unsigned int divceil(unsigned int n, unsigned int d);
 unsigned long ldivceil(unsigned long n, unsigned long d);

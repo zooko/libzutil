@@ -6,11 +6,9 @@ LIBSUFFIX=.a
 RANLIB=ranlib
 AR=ar
 
-CFLAGS_FOR_LIBRARY=-Wall -O2
-CFLAGS_FOR_TEST=-Wall -O0 -UNDEBUG
-# I would like to set these pedantic flags when compiling the library but not when compiling the test, but that would require writing my own .c -> .o rule...  So I just comment these lines in and out when compiling.  --Zooko 2002-09-03
-# CFLAGS=$(CFLAGS_FOR_LIBRARY)
-CFLAGS=$(CFLAGS_FOR_TEST)
+CPPFLAGS=-DNDEBUG
+CFLAGS=-w -O2
+# LDFLAGS += -g
 
 # SRCS=$(wildcard *.c)
 SRCS=zutil.c exhaust.c
@@ -27,12 +25,15 @@ ifneq ($(findstring clean,$(MAKECMDGOALS)),clean)
 ifneq (,$(SRCS:%.c=%.d))
 -include $(SRCS:%.c=%.d)
 endif
+ifneq (,$(TESTSRCS:%.c=%.d))
+-include $(TESTSRCS:%.c=%.d)
+endif
 endif
 
 
 %.d: %.c
 	@echo remaking $@
-	@set -e; $(CC) -MM $(CFLAGS) $< \
+	@set -e; $(CC) $(CPPFLAGS) $(CFLAGS) -MM $< \
 	| sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; \
 	[ -s $@ ] || rm -f $@
 
