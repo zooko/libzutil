@@ -10,12 +10,13 @@
 /* define LITTLE_ENDIAN if your machine stores integers with the most significant byte in the rightmost (highest-addressed) byte of the word */
 /* #define LITTLE_ENDIAN */
 
-#include "morelimits.h"
 #include "exhaust.h"
+#include "minmax.h"
+#include "morelimits.h"
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.1 2002/02/08 18:44:16 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.2 2002/02/09 13:50:39 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 2;
@@ -23,29 +24,6 @@ static int const zutil_vermicro = 0;
 static char const* const zutil_vernum = "0.2.0";
 
 typedef unsigned char zbyte;
-
-/**
- * Min/max functions that hopefully give compiler errors if used on different types of operands.
- * Unfortunately this fails if the operands are not valid operands for the unary & operators (for 
- * example, literal values).  If that happens you can use MAX_FLEXIBLE instead for that particular 
- * comparison.
- */
-#define MIN_STRICT(x, y) ((&(x)==&(y))?((x)<(y)?(x):(y)):((x)<(y)?(x):(y)))
-#define MAX_STRICT(x, y) ((&(x)==&(y))?((x)>(y)?(x):(y)):((x)>(y)?(x):(y)))
-
-/**
- * Min/max functions that just do what you expect.
- */
-#define MIN_FLEXIBLE(x, y) (((x)<0&&(y)>=0)?(x):((y)<0)?(y):((x)<(y))?(x):(y))
-#define MAX_FLEXIBLE(x, y) (((x)>0&&(y)<=0)?(x):((y)>0)?(y):((x)>(y))?(x):(y))
-
-#ifndef NDEBUG
-#define MIN MIN_FLEXIBLE
-#define MAX MAX_FLEXIBLE
-#else
-#define MIN MIN_STRICT
-#define MAX MAX_STRICT
-#endif
 
 /**
  * Reads the data from the first four bytes of `bs' and creates an unsigned long, according to big-
@@ -85,9 +63,12 @@ unsigned long LDIVCEIL(unsigned long n, unsigned long d);
 
 /**
  * Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn
- * Permission is hereby granted to any person to copy, use, modify, and 
- * redistribute this software in any way and for any purpose, subject to the 
- * following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software to deal in this software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of this software, and to permit
+ * persons to whom this software is furnished to do so, subject to the following
+ * conditions:
  * 
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of this software.

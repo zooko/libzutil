@@ -1,4 +1,5 @@
-#include <assert.h>
+#undef NDEBUG
+
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
@@ -9,41 +10,80 @@
 
 #include "zutil.h"
 
-#undef NDEBUG
+#include <assert.h>
+/*
+int test_minmax_flexible_crazybadargs()
+{
+	char b[10];
+	int z = 1;
+	MIN_FLEXIBLE(b, z);
+}
+*/
 
-int test_minmax_picky()
+/*
+int test_min_strict_diff_unsigned_types_should_be_ok_but_isnt()
+{
+	int i;
+	short int u = 3;
+	i = MIN_STRICT(2, u);
+	if (i != 2) {
+		printf("failed test MIN_STRICT(2, 3) != 2: %d\n", i);
+		return -1;
+	}
+	return 0;
+}
+*/
+
+/*
+int test_minmax_strict_badargs()
+{
+	int i;
+	unsigned int u = 3;
+	i = MIN_STRICT(2, u);
+	if (i != 2) {
+		printf("failed test MIN_STRICT(2, 3) != 2: %d\n", i);
+		return -1;
+	}
+	return 0;
+}
+*/
+
+int test_minmax_strict()
 {
 	int x = 2;
 	int y = 3;
-	int res = MIN(x, y);
+	int res = MIN_STRICT(x, y);
+	unsigned int z;
+	unsigned int b;
+	int a;
 	if (res != 2) {
 		printf("failed test MIN(%d, %d) != %d\n", x, y, 2);
 		return -1;
 	}
-	res = MIN(y, x);
+	res = MIN_STRICT(y, x);
 	if (res != 2) {
 		printf("failed test MIN(%d, %d) != %d\n", y, x, 2);
 		return -1;
 	}
-	unsigned int z = 4;
-	unsigned int b = 5;
-	res = MIN(z, b);
+	z = 4;
+	b = 5;
+	res = MIN_STRICT(z, b);
 	if (res != 4) {
 		printf("failed test MIN(%d, %d) != %d\n", z, b, 4);
 		return -1;
 	}
-	res = MIN(b, z);
+	res = MIN_STRICT(b, z);
 	if (res != 4) {
 		printf("failed test MIN(%d, %d) != %d\n", b, z, 4);
 		return -1;
 	}
-	int a = -1;
-	res = MIN(x, a);
+	a = -1;
+	res = MIN_STRICT(x, a);
 	if (res != -1) {
 		printf("failed test MIN(%d, %d) != %d\n", x, a, -1);
 		return -1;
 	}
-	res = MIN(a, x);
+	res = MIN_STRICT(a, x);
 	if (res != -1) {
 		printf("failed test MIN(%d, %d) != %d\n", a, x, -1);
 		return -1;
@@ -53,13 +93,17 @@ int test_minmax_picky()
 
 int test_minmax_lenient()
 {
+	int a, res, x;
+	unsigned int z;
+	long double q, ldres;
+	/*
 	if (test_minmax_picky()) {
 		return -1;
 	}
+	*/
 
-	int a = -2;
-	unsigned int z = 3;
-	int res;
+	a = -2;
+	z = 3;
 	
 	res = MIN(a, z);
 	if (res != -2) {
@@ -67,8 +111,7 @@ int test_minmax_lenient()
 		return -1;
 	}
 
-	long double q = 3.14159;
-	long double ldres;
+	q = 3.14159;
 
 	ldres = MIN(z, q);
 	if ((int)ldres != 3) {
@@ -82,7 +125,7 @@ int test_minmax_lenient()
 		return -1;
 	}
 
-	int x = 99;
+	x = 99;
 	res = MIN(x, q);
 	if (res != 3) {
 		printf("failed test MIN(%d, %Lf) != %d\n", x, q, 3);
@@ -167,7 +210,9 @@ int test_morelimits()
 
 int main(int argv, char**argc)
 {
-	test_minmax_lenient();
+  /*	test_minmax_lenient();*/
+	test_minmax_strict();
+	/*test_minmax_strict_badargs();*/
 	/*test_natlong();*/
 	/*test_morelimits();*/
 	/*test_exhausterr();*/
