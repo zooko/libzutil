@@ -7,7 +7,6 @@
 #ifndef __INCL_minmax_h
 #define __INCL_minmax_h
 
-#error "This stuff is untested and incompletely documented.  Use at your own risk.  I gotta hack on Mnet for CodeCon right now.  --Zooko 2002-02-10"
 /**
  * How to use these macros:
  *
