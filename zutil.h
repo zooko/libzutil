@@ -14,12 +14,12 @@
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.14 2004/02/08 16:22:12 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.15 2004/02/24 02:07:23 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 9;
-static char const* const zutil_vernum = "0.9.9";
+static int const zutil_vermicro = 10;
+static char const* const zutil_vernum = "0.9.10";
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 
@@ -134,12 +134,11 @@ int ADD_WOULD_OVERFLOW_ULLONG(unsigned long long x, unsigned long long y);
 /**
  * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software to deal in this software without restriction, including
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software to deal in this software without restriction, including 
  * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies of this software, and to permit persons to whom this software is 
- * furnished to do so, provided that the above copyright notice and this 
- * permission notice is included in all copies or substantial portions of this 
- * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED.
+ * sell copies, provided that the above copyright notice and this permission 
+ * notice is included in all copies or substantial portions of this softare. 
+ * THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED.
  */

@@ -23,7 +23,7 @@ unsigned long UINT32_DECODE(const zbyte* const bs)
 }
 
 #undef uint32_encode
-void uint32_encode(const unsigned int u, zbyte* bs)
+void uint32_encode(unsigned int u, zbyte* const bs)
 {
 	runtime_assert(u <= Z_UINT32_MAX, "Cannot encode a number this into 32 bits.");
 	bs[3] = u % Z_UINT8_MAX;
@@ -152,12 +152,8 @@ int ADD_WOULD_OVERFLOW_ULLONG(unsigned long long x, unsigned long long y) {
 /**
  * Copyright (c) 2002-2004 Bryce "Zooko" Wilcox-O'Hearn
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software to deal in this software without restriction, including
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software to deal in this software without restriction, including 
  * without limitation the rights to use, modify, distribute, sublicense, and/or 
- * sell copies of this software, and to permit persons to whom this software is 
- * furnished to do so, provided that the above copyright notice and this 
- * permission notice is included in all copies or substantial portions of this 
- * software. THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED.
+ * sell copies.
  */

@@ -23,7 +23,7 @@
 #define Z_MAX(typ) ((Z_MAX_SIGNED(typ) > Z_MAX_UNSIGNED(typ))?Z_MAX_SIGNED(typ):Z_MAX_UNSIGNED(typ))
 #define Z_MIN(typ) ((Z_MIN_SIGNED(typ) < Z_MIN_UNSIGNED(typ))?Z_MIN_SIGNED(typ):Z_MIN_UNSIGNED(typ))
 
-#define Z_UNSIGNED_HIGH_BIT_BITS(b) (1 << ((b)-1))
+#define Z_UNSIGNED_HIGH_BIT_BITS(b) (1U << ((b)-1))
 #define Z_UNSIGNED_LOW_BITS_BITS(b) (Z_UNSIGNED_HIGH_BIT_BITS(b)-1)
 #define Z_MAX_UNSIGNED_BITS(b) (Z_UNSIGNED_HIGH_BIT_BITS(b) | Z_UNSIGNED_LOW_BITS_BITS(b))
 
