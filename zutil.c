@@ -7,16 +7,29 @@
 
 #include "zutil.h"
 
-#undef natlong
-unsigned long natlong(const void* const vs)
+#undef uint32_decode
+unsigned long uint32_decode(const zbyte* const bs)
 {
-	return ((unsigned long)(((zbyte*)vs)[3])) | ((unsigned long)(((zbyte*)vs)[2])) << 8 | ((unsigned long)(((zbyte*)vs)[1])) << 16 | ((unsigned long)(((zbyte*)vs)[0])) << 24;
+	return ((unsigned long)(bs[3])) | ((unsigned long)(bs[2])) << 8 | ((unsigned long)(bs[1])) << 16 | ((unsigned long)(bs[0])) << 24;
 }
 
-#undef NATLONG
-unsigned long NATLONG(const void* const vs)
+#undef UINT32_DECODE
+unsigned long UINT32_DECODE(const zbyte* const bs)
 {
-	return ((unsigned long)(((zbyte*)vs)[3])) | ((unsigned long)(((zbyte*)vs)[2])) << 8 | ((unsigned long)(((zbyte*)vs)[1])) << 16 | ((unsigned long)(((zbyte*)vs)[0])) << 24;
+	return ((unsigned long)(bs[3])) | ((unsigned long)(bs[2])) << 8 | ((unsigned long)(bs[1])) << 16 | ((unsigned long)(bs[0])) << 24;
+}
+
+#undef uint32_encode
+void uint32_encode(const unsigned int u, zbyte* bs)
+{
+	runtime_assert(u <= UINT32_MAX, "Cannot encode a number this into 32 bits.");
+	bs[3] = u % UINT8_MAX;
+	u /= UINT8_MAX;
+	bs[2] = u % UINT8_MAX;
+	u /= UINT8_MAX;
+	bs[1] = u % UINT8_MAX;
+	u /= UINT8_MAX;
+	bs[0] = u;
 }
 
 #undef divceil

@@ -14,7 +14,7 @@
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.5 2003/12/14 17:48:59 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.6 2004/02/06 16:47:46 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;
@@ -29,6 +29,15 @@ static char const* const morelimits_vernum = "0.9.0";
 
 #define TIME_T_MAX Z_MAX(time_t)
 #define TIME_T_MIN Z_MIN(time_t)
+
+/*
+ * The C standard does not offer integers of an exact width, so if you rely on 
+ * an integer to be of a specific width your code may not port to all C 
+ * platforms.  The following are intended to be used only for reading and 
+ * writing integers of fixed width from streams of data.
+ */
+#define UINT8_MAX Z_MAX_UNSIGNED_BITS(8)
+#define UINT32_MAX Z_MAX_UNSIGNED_BITS(32)
 
 /*
  * The following are not defined in the standard C library's "limits.h", 

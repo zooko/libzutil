@@ -13,18 +13,36 @@
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.11 2003/12/15 22:42:22 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.12 2004/02/06 16:47:47 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 6;
-static char const* const zutil_vernum = "0.9.6";
+static int const zutil_vermicro = 8;
+static char const* const zutil_vernum = "0.9.8";
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 
  * least 8 bits.  It is allowed to be larger.
  */
 typedef unsigned char zbyte;
+
+/**
+ * Decode a four bytes into an unsigned int.  bs points to a buffer which must 
+ * have (at least) four elements; the first four elements of bs contain the 
+ * encoding of the unsigned integer in big-endian format.
+ */
+unsigned long uint32_decode(const zbyte* bs);
+unsigned long UINT32_DECODE(const zbyte* bs);
+
+/**
+ * Encode an unsigned int into four zbytes in big-endian format.  Aborts (via 
+ * runtime_assert()) if the value is too large to encode into 32 bits (that is, 
+ * if it is >= 2^32).
+ *
+ * @param u: the value to encode
+ * @param bs: pointer to the first byte of an array of at least four zbytes
+ */
+void uint32_encode(unsigned int u, zbyte* bs);
 
 /*
 Returns ceil(x/y): the smallest integer which is greater than or equal to x/y.

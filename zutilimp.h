@@ -12,6 +12,7 @@
 #ifdef NDEBUG
 #define DIVCEIL(n, d) ((n)/(d)+((n)%(d)!=0))
 #define LDIVCEIL(n, d) ((unsigned long)((n)/(d)+((n)%(d)!=0)))
+#define UINT32_DECODE(bs) ((unsigned long)((bs)[3])) | ((unsigned long)((bs)[2])) << 8 | ((unsigned long)((bs)[1])) << 16 | ((unsigned long)((bs)[0])) << 24;
 #endif /* #ifdef NDEBUG */
 
 #define Z_ZERO_VAL(x) ((x)-(x))
