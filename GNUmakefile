@@ -17,7 +17,7 @@ CFLAGS=-Wall -O2
 # LDFLAGS += -g
 
 # SRCS=$(wildcard *.c)
-SRCS=zutil.c exhaust.c
+SRCS=zutil.c exhaust.c moreassert.c delegate.c
 TESTSRCS=test.c
 OBJS=$(SRCS:%.c=%.o)
 TESTOBJS=$(TESTSRCS:%.c=%.o)
