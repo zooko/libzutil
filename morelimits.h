@@ -14,7 +14,7 @@
 
 #include "zutil.h"
 
-static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.6 2004/02/06 16:47:46 zooko Exp $";
+static char const* const morelimits_h_cvsid = "$Id: morelimits.h,v 1.7 2004/02/06 17:46:13 zooko Exp $";
 
 static int const morelimits_vermaj = 0;
 static int const morelimits_vermin = 9;
@@ -36,8 +36,8 @@ static char const* const morelimits_vernum = "0.9.0";
  * platforms.  The following are intended to be used only for reading and 
  * writing integers of fixed width from streams of data.
  */
-#define UINT8_MAX Z_MAX_UNSIGNED_BITS(8)
-#define UINT32_MAX Z_MAX_UNSIGNED_BITS(32)
+#define Z_UINT8_MAX Z_MAX_UNSIGNED_BITS(8)
+#define Z_UINT32_MAX Z_MAX_UNSIGNED_BITS(32)
 
 /*
  * The following are not defined in the standard C library's "limits.h", 

@@ -7,6 +7,9 @@
 
 #include "zutil.h"
 
+#include "moreassert.h"
+#include "morelimits.h"
+
 #undef uint32_decode
 unsigned long uint32_decode(const zbyte* const bs)
 {
@@ -22,13 +25,13 @@ unsigned long UINT32_DECODE(const zbyte* const bs)
 #undef uint32_encode
 void uint32_encode(const unsigned int u, zbyte* bs)
 {
-	runtime_assert(u <= UINT32_MAX, "Cannot encode a number this into 32 bits.");
-	bs[3] = u % UINT8_MAX;
-	u /= UINT8_MAX;
-	bs[2] = u % UINT8_MAX;
-	u /= UINT8_MAX;
-	bs[1] = u % UINT8_MAX;
-	u /= UINT8_MAX;
+	runtime_assert(u <= Z_UINT32_MAX, "Cannot encode a number this into 32 bits.");
+	bs[3] = u % Z_UINT8_MAX;
+	u /= Z_UINT8_MAX;
+	bs[2] = u % Z_UINT8_MAX;
+	u /= Z_UINT8_MAX;
+	bs[1] = u % Z_UINT8_MAX;
+	u /= Z_UINT8_MAX;
 	bs[0] = u;
 }
 

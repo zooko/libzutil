@@ -24,7 +24,7 @@
 
 #define Z_UNSIGNED_HIGH_BIT_BITS(b) (1 << ((b)-1))
 #define Z_UNSIGNED_LOW_BITS_BITS(b) (Z_UNSIGNED_HIGH_BIT_BITS(b)-1)
-#define Z_MAX_UNSIGNED_BITS(b) (Z_UNSIGNED_HIGH_BIT_BITS(b) | Z_UNSIGNED_LOW_BIT_BITS(b))
+#define Z_MAX_UNSIGNED_BITS(b) (Z_UNSIGNED_HIGH_BIT_BITS(b) | Z_UNSIGNED_LOW_BITS_BITS(b))
 
 #endif /* #ifndef __INCL_morelimitsimp_h */
 

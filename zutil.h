@@ -13,12 +13,12 @@
 
 #include <stddef.h>
 
-static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.12 2004/02/06 16:47:47 zooko Exp $";
+static char const* const zutil_h_cvsid = "$Id: zutil.h,v 1.13 2004/02/06 17:46:13 zooko Exp $";
 
 static int const zutil_vermaj = 0;
 static int const zutil_vermin = 9;
-static int const zutil_vermicro = 8;
-static char const* const zutil_vernum = "0.9.8";
+static int const zutil_vermicro = 9;
+static char const* const zutil_vernum = "0.9.9";
 
 /**
  * This is guaranteed by standard C to be at least large enough to store at 
