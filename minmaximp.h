@@ -7,6 +7,8 @@
 #ifndef __INCL_minmaximp_h
 #define __INCL_minmaximp_h
 
+#include "morelimits.h"
+
 /**
  * Min/max macros that are fast but unsafe.  If one of the arguments is negative 
  * and the other is of a type that doesn't promote to a signed type, you'll get 
@@ -31,12 +33,12 @@
 #define _MAX_SAFE(x, y) (((x)>=0&&(y)<0)?(x):(((y)>=0&&(x)<0)?(y):(((x)>(y))?(x):(y))))
 
 /**
- * This handy-dandy macro is almost as fast as _MAX_UNSAFE while being as safe 
- * as _MAX_SAFE.  It can be exactly as fast as _MAX_SAFE in the case that both 
- * of the operands are of a type that promotes to a signed type or both of the 
- * operands are of a type that promotes to an unsigned type, since the compiler 
- * can determine this at compile time.  It can also be faster than _MAX_SAFE in 
- * some other cases.
+ * This handy-dandy _FASTER_MAX_SAFE macro is almost as fast as _MAX_UNSAFE 
+ * while being as safe as _MAX_SAFE.  It can be exactly as fast as _MAX_SAFE in 
+ * the case that both of the operands are of a type that promotes to a signed 
+ * type or both of the operands are of a type that promotes to an unsigned type, 
+ * since the compiler can determine this at compile time.  It can also be faster 
+ * than _MAX_SAFE in some other cases.
  */
 #define _PROMOTE_NONLL_TO_LLS(x) \
     ((sizeof(x)<sizeof(long long)) ? \
@@ -76,6 +78,8 @@
  */
 /* _MIN_LLS_FLEX is just for pedantic and verification purposes -- we use _FASTER_MIN_LLS_FLEX in practice. */
 #define OPERAND_IS_LLU(x) ((sizeof(x) > sizeof(long)) && (!OPERAND_PROMOTES_TO_SIGNED_TYPE(x))) 
+/* We define OPERAND_EXCEEDS_LLONG_MAX in this funny way in order to trick gcc into not giving warnings about comparisons being useless due to the limited range of datatypes. */
+#define OPERAND_EXCEEDS_LLONG_MAX(x) ((ULLONG_MAX - (x)) < (ULLONG_MAX - LLONG_MAX))
 #define _MIN_LLS_FLEX(x, y) (((x)<0&&(y)>=0)?((long long)(x)):(((y)<0&&(x)>=0)?((long long)(y)):(((x)<(y))?((long long)(x)):((long long)(y)))))
 /* _MIN_LLS_CHECK is just for pedantic and verification purposes -- we use _FASTER_MIN_LLS_CHECK in practice. */
 #define _MIN_LLS_UNSAFE(x, y) \
@@ -83,46 +87,44 @@
         ((signed long long)(x)) : \
         ((signed long long)(y)))
 #define _MIN_LLS_CHECK(x, y) \
-    (OPERAND_IS_LLU(x) && OPERAND_IS_LLU(y) && ((x) > LLONG_MAX) && ((y) > LLONG_MAX)) ? \
+    ((OPERAND_IS_LLU(x) && OPERAND_IS_LLU(y) && OPERAND_EXCEEDS_LLONG_MAX(x) && OPERAND_EXCEEDS_LLONG_MAX(y)) ? \
         _RAISE_EXCEPTION : \
-        _MIN_LLS_UNSAFE(x, y)
+        _MIN_LLS_UNSAFE(x, y))
 #define _FASTER_MIN_LLS_CHECK(x, y) \
     (OPERAND_IS_LLU(x) ? \
         (OPERAND_IS_LLU(y) ? \
-            (((x) > LLONG_MAX) ? \
-                (((y) > LLONG_MAX) ? \
+            (OPERAND_EXCEEDS_LLONG_MAX(x) ? \
+                (OPERAND_EXCEEDS_LLONG_MAX(y) ? \
                     _RAISE_EXCEPTION : \
                     ((signed long long)(y))) : \
-                (((y) > LLONG_MAX) ? \
+                (OPERAND_EXCEEDS_LLONG_MAX(y) ? \
                     ((signed long long)(x)) : \
                     _MIN_LLS_UNSAFE(x, y))) : \
-            (((x) > LLONG_MAX) ? \
+            (OPERAND_EXCEEDS_LLONG_MAX(x) ? \
                 ((signed long long)(y)) : \
                 _MIN_LLS_UNSAFE(x, y))) : \
         (OPERAND_IS_LLU(y) ? \
-            (((y) > LLONG_MAX) ? \
+            (OPERAND_EXCEEDS_LLONG_MAX(y) ? \
                 ((signed long long)(x)) : \
                 _MIN_LLS_UNSAFE(x, y)) : \
             _MIN_LLS_UNSAFE(x, y)))
 #define _FASTER_MIN_LLS_FLEX(x, y) \
     (OPERAND_IS_LLU(x) ? \
         (OPERAND_IS_LLU(y) ? \
-            (((x) > LLONG_MAX) ? \
-                (((y) > LLONG_MAX) ? \
-                    (((x)<(y)) ? \
-                        ((signed long long)(x)) : \
-                        ((signed long long)(y))) : \
-                    ((signed long long)(y))) : \
-                (((y) > LLONG_MAX) ? \
-                    ((signed long long)(x)) : \
-                    _MIN_LLS_UNSAFE(x, y))) : \
-            (((x) > LLONG_MAX) ? \
-                ((signed long long)(y)) : \
-                _MIN_LLS_UNSAFE(x, y))) : \
-        (OPERAND_IS_LLU(y) ? \
-            (((y) > LLONG_MAX) ? \
+            (((x)<(y)) ? \
                 ((signed long long)(x)) : \
-                _MIN_LLS_UNSAFE(x, y)) : \
+                ((signed long long)(y))) : \
+            (((y)<0) ? \
+                ((signed long long)(y)) : \
+                (((x)<(y)) ? \
+                    ((signed long long)(x)) : \
+                    ((signed long long)(y))))) : \
+        (OPERAND_IS_LLU(y) ? \
+            (((x)<0) ? \
+                ((signed long long)(x)) : \
+                (((x)<(y)) ? \
+                    ((signed long long)(x)) : \
+                    ((signed long long)(y)))) : \
             _MIN_LLS_UNSAFE(x, y)))
 
 /**

@@ -6,8 +6,10 @@ LIBSUFFIX=.a
 RANLIB=ranlib
 AR=ar
 
+# CC=gcc-3.3
+# CPPFLAGS=-UNDEBUG -std=c99
 CPPFLAGS=-DNDEBUG
-CFLAGS=-w -O2
+CFLAGS=-Wall -O2
 # LDFLAGS += -g
 
 # SRCS=$(wildcard *.c)

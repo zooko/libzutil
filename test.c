@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <limits.h>
+#include <time.h>
 
 #include "zutil.h"
 
@@ -399,20 +400,6 @@ int test_minmax_fast()
 	return 0;
 }
 
-int test_gcc_ifexpr()
-{
-	int i;
-	unsigned int u;
-	const typeof(1>0?i:u) _res = 1>0?i:u;
-	const typeof(u) _u = u;
-	/* Now by ANSI C rules, the expression `1>0?i:u' must have typed unsigned int! */
-	if (&_res==&_u) {
-		/* That `==' is just to elicit a compiler error if they are of different types... */
-		return 2;
-	}
-	return 0;
-}
-
 int _test_MIN_smallerint_biggeruint(int i, unsigned u) {
 	if (MIN(i, u) >= u) {
 		printf("failed test %d MIN(%d, %uU): %lldLL == %lluULL >= u == %uU\n", __LINE__, i, u, MIN(i, u), MIN(i, u), u);
@@ -428,10 +415,10 @@ int _test_MIN_smallerint_biggeruint(int i, unsigned u) {
 
 int _test_MAX_smallerint_biggeruint(int i, unsigned u) {
 	if (MAX(i, u) < u) {
-		printf("failed test %d MAX(%d, %uU): %d == %uU < u == %uU == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u, u);
+		printf("failed test %d MAX(%d, %uU): %lldLL == %lluLLU < u == %uU == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u, u);
 	}
 	if (MAX(i, u) != u) {
-		printf("failed test %d MAX(%d, %uU): %d == %uU != u == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%d, %uU): %lldLL == %lluLLU != u == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
@@ -451,13 +438,13 @@ int _test_MIN_smallerlong_biggerulong(long i, unsigned long u) {
 
 int _test_MAX_smallerlong_biggerulong(long i, unsigned long u) {
 	if (MAX(i, u) <= i) {
-		printf("failed test %d MAX(%ld, %lu): %ldL == %luUL <= i == %ld\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%ld, %lu): %lldLL == %lluLLU <= i == %ld\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	if (MAX(i, u) < u) {
-		printf("failed test %d MAX(%ld, %lu): %ldL == %luUL < u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%ld, %lu): %lldLL == %lluLLU < u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	if (MAX(i, u) != u) {
-		printf("failed test %d MAX(%ld, %lu): %ldL == %luUL != u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%ld, %lu): %lldLL == %lluLLU != u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
@@ -477,33 +464,33 @@ int _test_MIN_biggerint_smalleruint(int i, unsigned u) {
 
 int _test_MAX_biggerint_smalleruint(int i, unsigned u) {
 	if (MAX(i, u) <= u) {
-		printf("failed test %d MAX(%d, %uU): %d == %uU <= u == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%d, %uU): %lldLL == %lluLLU <= u == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	if (MAX(i, u) < i) {
-		printf("failed test %d MAX(%d, %d): %d == %uU < i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%d, %d): %lldLL == %lluLLU < i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	if (MAX(i, u) != i) {
-		printf("failed test %d MAX(%d, %d): %d == %uU != i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%d, %d): %lldLL == %lluLLU != i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	return 0;
 }
 
 int _test_MIN_biggerulong_smallerint(unsigned long u, int i) {
 	if (MIN(u, i) >= u) {
-		printf("failed test %d MIN(%luUL, %d): %ldL == %luUL >= u == %luLU\n", __LINE__, u, i, MIN(u, i), MIN(u, i), u);
+		printf("failed test %d MIN(%luUL, %d): %lldLL == %lluLLU >= u == %luLU\n", __LINE__, u, i, MIN(u, i), MIN(u, i), u);
 	}
 	if (MIN(u, i) != i) {
-		printf("failed test %d MIN(%luUL, %d): %ldL == %luUL != i == %d\n", __LINE__, u, i, MIN(u, i), MIN(u, i), i);
+		printf("failed test %d MIN(%luUL, %d): %lldLL == %lluLLU != i == %d\n", __LINE__, u, i, MIN(u, i), MIN(u, i), i);
 	}
 	return 0;
 }
 
 int _test_MAX_biggerulong_smallerint(unsigned long u, int i) {
 	if (MAX(u, i) <= i) {
-		printf("failed test %d MAX(%luUL, %d): %ldL == %luUL <= i == %d\n", __LINE__, u, i, MAX(u, i), MAX(u, i), i);
+		printf("failed test %d MAX(%luUL, %d): %lldLL == %lluLLU <= i == %d\n", __LINE__, u, i, MAX(u, i), MAX(u, i), i);
 	}
 	if (MAX(u, i) != u) {
-		printf("failed test %d MAX(%luUL, %d): %lldLL == %lluULL != u == %luUL\n", __LINE__, u, i, MAX(u, i), MAX(u, i), u);
+		printf("failed test %d MAX(%luUL, %d): %lldLL == %lluLLU != u == %luUL\n", __LINE__, u, i, MAX(u, i), MAX(u, i), u);
 	}
 	return 0;
 }
@@ -546,16 +533,16 @@ int _test_MIN_biggerlong_smallerulong(long i, unsigned long u) {
 
 int _test_MAX_biggerlong_smallerulong(long i, unsigned long u) {
 	if (MAX(i, u) <= -1) {
-		printf("failed test %d MAX(%ld, %luLU): %ldL == %luLU <= -1 == %d == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), -1, -1);
+		printf("failed test %d MAX(%ld, %luLU): %lldLL == %lluLLU <= -1 == %d == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), -1, -1);
 	}
 	if (MAX(i, u) <= u) {
-		printf("failed test %d MAX(%ld, %luLU): %ldL == %luLU <= u == %luLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%ld, %luLU): %lldLL == %lluLLU <= u == %luLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	if (MAX(i, u) < i) {
-		printf("failed test %d MAX(%ld, %ldL): %ldLL == %luLU < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%ld, %ldL): %lldLL == %lluLLU < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	if (MAX(i, u) != i) {
-		printf("failed test %d MAX(%ld, %ldL): %ldL == %luLU != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%ld, %ldL): %lldLL == %lluLLU != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	return 0;
 }
@@ -581,13 +568,13 @@ int _test_MAX_biggerlong_smallerullong(long i, unsigned long long u) {
 		printf("failed test %d as expected MAX(%ld, %lluLLU): %ldL == %luUL <= -1 == %d == %u\n", __LINE__, i, u, MAX(i, u), MAX(i, u), -1, -1);
 	}*/
 	if (MAX(i, u) <= u) {
-		printf("failed test %d MAX(%ld, %lluLLU): %ldL == %luUL <= u == %lluLLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU <= u == %lluLLU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	if (MAX(i, u) < i) {
-		printf("failed test %d MAX(%ld, %lluLLU): %ldLL == %luUL < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU < i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	if (MAX(i, u) != i) {
-		printf("failed test %d MAX(%ld, %lluLLU): %ldL == %luUL != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%ld, %lluLLU): %lldLL == %lluLLU != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	return 0;
 }
@@ -604,10 +591,10 @@ int _test_MIN_equalint_equaluint(int i, unsigned u) {
 
 int _test_MAX_equalint_equaluint(int i, unsigned u) {
 	if (MAX(i, u) != i) {
-		printf("failed test %d MAX(%d, %d): %d == %uU != i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%d, %d): %lldLL == %lluLLU != i == %d\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	if (MAX(i, u) != u) {
-		printf("failed test %d MAX(%d, %d): %d == %uU != u == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%d, %d): %lldLL == %lluLLU != u == %uU\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
@@ -624,10 +611,10 @@ int _test_MIN_equallong_equalulong(long i, unsigned long u) {
 
 int _test_MAX_equallong_equalulong(long i, unsigned long u) {
 	if (MAX(i, u) != i) {
-		printf("failed test %d MAX(%ld, %ld): %ldL == %luUL != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
+		printf("failed test %d MAX(%ld, %ld): %lldLL == %lluLLU != i == %ldL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), i);
 	}
 	if (MAX(i, u) != u) {
-		printf("failed test %d MAX(%ld, %ld): %ldL == %luUL != u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
+		printf("failed test %d MAX(%ld, %ld): %lldLL == %lluLLU != u == %luUL\n", __LINE__, i, u, MAX(i, u), MAX(i, u), u);
 	}
 	return 0;
 }
@@ -1010,47 +997,48 @@ int test_MAX_transparentbox() {
 	unsigned long b = 2;
 	/* 1, 1, x */
 	if (MAX(x, y) != x) {
-		printf("failed test %d MAX(%c, %c): %c == %ldL == %luUL != %c\n", __LINE__, x, y, MAX(x, y), MAX(x, y), x);
+		printf("failed test %d MAX(%c, %c): %lldLL == %lluLLU != %c\n", __LINE__, x, y, MAX(x, y), MAX(x, y), x);
 	}
 	/* 1, 1, y */
 	if (MAX(y, x) != x) {
-		printf("failed test %d MAX(%c, %c): %c == %ldL == %luUL != %c\n", __LINE__, y, x, MAX(y, x), MAX(y, x), x);
+		printf("failed test %d MAX(%c, %c): %lldLL == %lluLLU != %c\n", __LINE__, y, x, MAX(y, x), MAX(y, x), x);
 	}
 	/* 1, 0, 1 */
 	if (MAX(y, z) != z) {
-		printf("failed test %d MAX(%c, %luUL): %ldL == %luUL != %luUL\n", __LINE__, y, z, MAX(y, z), MAX(y, z), z);
+		printf("failed test %d MAX(%c, %luLU): %lldLL == %lluLLU != %luLU\n", __LINE__, y, z, MAX(y, z), MAX(y, z), z);
 	}
 	/* 1, 0, 0, x */
 	if (MAX(a, z) != a) {
-		printf("failed test %d MAX(%c, %luUL): %ldL == %luUL != %c\n", __LINE__, a, z, MAX(a, z), MAX(a, z), a);
+		printf("failed test %d MAX(%c, %luLU): %lldLL == %lluLLU != %c\n", __LINE__, a, z, MAX(a, z), MAX(a, z), a);
 	}
 	/* 1, 0, 0, y */
 	if (MAX(a, b) != b) {
-		printf("failed test %d MAX(%c, %luUL): %ldL == %luUL != %luUL\n", __LINE__, a, b, MAX(a, b), MAX(a, b), b);
+		printf("failed test %d MAX(%c, %luLU): %lldLL == %lluLLU != %luLU\n", __LINE__, a, b, MAX(a, b), MAX(a, b), b);
 	}
 	/* 0, 1, 1 */
 	if (MAX(z, y) != z) {
-		printf("failed test %d MAX(%luUL, %c): %ldL == %luUL != %c\n", __LINE__, z, y, MAX(z, y), MAX(z, y), z);
+		printf("failed test %d MAX(%luLU, %c): %lldLL == %lluLLU != %luLU\n", __LINE__, z, y, MAX(z, y), MAX(z, y), z);
 	}
 	/* 0, 1, 0, x */
 	if (MAX(b, a) != b) {
-		printf("failed test %d MAX(%luUL, %c): %ldL == %luUL != %luUL\n", __LINE__, b, a, MAX(b, a), MAX(b, a), b);
+		printf("failed test %d MAX(%luLU, %c): %lldLL == %lluLLU != %luLU\n", __LINE__, b, a, MAX(b, a), MAX(b, a), b);
 	}
 	/* 0, 1, 0, y */
 	if (MAX(z, a) != a) {
-		printf("failed test %d MAX(%luUL, %c): %ldL == %luUL != %c\n", __LINE__, z, a, MAX(z, a), MAX(z, a), a);
+		printf("failed test %d MAX(%luLU, %c): %lldLL == %lluLLU != %c\n", __LINE__, z, a, MAX(z, a), MAX(z, a), a);
 	}
 	/* 0, 0, x */
 	if (MAX(b, z) != b) {
-		printf("failed test %d MAX(%luUL, %luUL): %ldL == %luUL != %luUL\n", __LINE__, b, z, MAX(b, z), MAX(b, z), b);
+		printf("failed test %d MAX(%luLU, %luLU): %lldLL == %lluLLU != %luLU\n", __LINE__, b, z, MAX(b, z), MAX(b, z), b);
 	}
 	/* 0, 0, y */
 	if (MAX(z, b) != b) {
-		printf("failed test %d MAX(%luUL, %luUL): %ldL == %luUL != %luUL\n", __LINE__, z, b, MAX(z, b), MAX(z, b), b);
+		printf("failed test %d MAX(%luLU, %luLU): %lldLL == %lluLLU != %luLU\n", __LINE__, z, b, MAX(z, b), MAX(z, b), b);
 	}
+	return 0;
 }
 
-int test_MAX() {
+void test_MAX() {
 	test_MAX_transparentbox();
 	_test_various_MAX_smallerint_biggeruint();
 	_test_various_MAX_smallerlong_biggerulong();
@@ -1063,10 +1051,9 @@ int test_MAX() {
 	_test_various_MAX_hugerullong_hugeullong();
 	_test_various_MAX_biggerulong_smallerint();
 	_test_various_MAX_biggerullong_smallerint();
-	return 0;
 }
 
-int test_exhausterr()
+void test_exhausterr()
 {
 	CHECKMALLOC((const char*const)malloc(UINT_MAX));
 }
@@ -1162,7 +1149,6 @@ int test() {
 	test_PROMOTES_TO_SIGNED_TYPE();
 	test_overflow();
 	test_morelimits();
-	test_gcc_ifexpr();
 	/*test_MIN_crazybadargs();*/
 	test_MIN();
 	test_MAX();

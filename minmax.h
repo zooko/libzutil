@@ -23,11 +23,15 @@
  * to false: MAX(2, 1LLU) > -1
  * This is just something that you should be aware of as a C programmer -- it 
  * happens anytime a signed value is compared to an unsigned value and has 
- * nothing to do with the MAX macro.  (As a matter of fact, the MAX macro 
- * casts the result to signed long long, unless the result is too big to fit 
- * into a signed long long.  That's why (MAX(2, 1LU) > -1) is true, just as you 
- * would expect if you didn't know about C's integer promotion rules.  Other 
- * than making such comparisons come out true, this cast has no effect.)
+ * nothing to do with the MAX macro.
+ * 
+ * As a matter of fact, the MAX macro casts the result to signed long long, 
+ * unless the result is too big to fit into a signed long long.  That's why 
+ * (MAX(2, 1LU) > -1) is true, just as you would expect if you didn't know about 
+ * C's integer promotion rules.  This might cause spurious warnings or other 
+ * issues even though it never changes the actual value.  For example, if you 
+ * are using MAX as the argument to (s)printf, you ought to manually cast it to 
+ * the right type.
  * 
  * MIN
  *
